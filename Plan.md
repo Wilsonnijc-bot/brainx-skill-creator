@@ -565,7 +565,7 @@ brainx-install/
 
 The reference layer below follows your uploaded Reference Markdown Plan. I changed the source format into literal HTML links, as requested.
 
-### 4.1 Brain Dynamics
+### 4.1 Brain Dynamics Related References
 
 #### brain-dynamics-delay protocol
 
@@ -579,7 +579,7 @@ The reference layer below follows your uploaded Reference Markdown Plan. I chang
 - Mirror Source URLs:
   - https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html
 
-### 4.2 BrainCell
+### 4.2 BrainCell Related References
 
 #### braincell-custom-ion-channel authoring
 
@@ -620,7 +620,7 @@ The reference layer below follows your uploaded Reference Markdown Plan. I chang
   - https://brainx.chaobrain.com/braincell/tutorials/vis.html
   - https://brainx.chaobrain.com/braincell/tutorials/filter.html
 
-### 4.3 BrainState
+### 4.3 BrainState Related References
 
 #### advanced randomness
 
@@ -675,7 +675,7 @@ The reference layer below follows your uploaded Reference Markdown Plan. I chang
   - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
   - https://brainx.chaobrain.com/brainstate/tutorials/transformations/04_advanced_batching.html
 
-### 4.4 Diagnostics
+### 4.4 Diagnostics Related References
 
 #### brainstate-transformed diagnostics
 
@@ -690,7 +690,7 @@ The reference layer below follows your uploaded Reference Markdown Plan. I chang
 - Mirror Source URLs:
   - None — local cross-reference router.
 
-### 4.5 Libraries
+### 4.5 Libraries Related References
 
 #### channel library
 
