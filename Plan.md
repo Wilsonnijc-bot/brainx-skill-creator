@@ -13,14 +13,11 @@
 
 ## 1. Overview and Scope
 
-- 需求：computational neuroscience 的科研人员需要使用 BrainX 的代码框架建模，现在普遍使用 AI agent 做 coding，所以这套 skill 需要教会 AI agent 使用 BrainX 的框架，并且根据 AI agent 的上下文性质，整个 skill 设计渐进式披露，以达到高效的 token 使用，把信息分成 2 层：最核心且代表大方向的会放在 skill 层，在大方向之后的发散知识点以及最完整 example script 以 reference 的形式表示。
-- 本版是 direct mapping version：把 current skill 中已经明确引用的 reference markdowns 和 script references 插入到对应 skill 下。
-- `brainx-debugging-diagnostics` 和 `skill-evolution` 当前在 `git status` 中显示为 deleted，因此不作为 current skill 层展开。
+- 需求：computational neuroscience 有关的科研人员需要使用 BrainX 的代码框架建模，现在普遍使用 AI agent 做 coding，所以这套 skill 需要教会 AI agent 使用 BrainX 的框架，并且根据 AI agent 的上下文性质，整个 skill 设计遵从渐进式披露的思想，以达到高效的 token使用，把信息分成 2 层：最核心且代表大方向的知识点放在 skill 层，把大方向之下发散知识点以及最完整样例代码归类 以 reference 的形式让agent去点击。
 
 ## 2. Complete Current Skill List
 
 ```text
-skills/
 braincell-multicompartment/
 braincell-singlecell/
 brainstate-brain-dynamics/
@@ -98,7 +95,7 @@ brainx-install/
     - writing custom ion/channel before checking built-in libraries
     - inventing BrainX APIs instead of opening official examples
   - Reference:
-    - `common failure wiki.md`
+    - common failure wiki
 
 ### 3.3 brainunit-quantity-safety
 
@@ -182,11 +179,11 @@ brainx-install/
       - linear
     - full script example ModernCNN from tutorial
   - Reference markdowns:
-    - Pre-built Activation Functions.md
-    - Pre-built Basic Layers.md
-    - parameters and regularization.md
-    - Size Inference with Convolution.md
-    - Size Inference with Pooling & Flatten.md
+    - Pre-built Activation Functions
+    - Pre-built Basic Layers
+    - parameters and regularization
+    - Size Inference with Convolution
+    - Size Inference with Pooling & Flatten
     - Skill for Deeplearning Training
     - Skill for randomness and reproducibility
     - Modern CNN script from “activation function and normalization https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html”
@@ -223,11 +220,11 @@ brainx-install/
     - minimal vmap over batch
     - composed train-step transform
   - Reference markdowns:
-    - references/brainstate/brainstate-control-flow-patterns.md
-    - references/brainstate/transformation-grad-expansion.md
-    - references/brainstate/transformation-jit-expansion.md
-    - references/brainstate/transformation-vmap-expansion.md
-    - references/diagnostics/brainstate-transformed-diagnostics.md
+    - brainstate-control-flow patterns
+    - transformation-grad expansion
+    - transformation-jit expansion
+    - transformation-vmap expansion
+    - brainstate-transformed diagnostics
   - Common failures:
     - using raw `jax.jit` on mutable BrainState modules
     - differentiating positional arguments like plain JAX when the target is ParamState
@@ -273,7 +270,7 @@ brainx-install/
     - parallel randomness
     - stochastic brain-dynamics workflows
   - Reference markdowns:
-    - references/brainstate/advanced-randomness.md
+    - advanced randomness
   - Common failures:
     - manually creating/splitting raw JAX keys by default
     - forgetting to seed reproducible examples
@@ -305,12 +302,12 @@ brainx-install/
 - Then mirror the scripts in:
   - https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html
 - Reference markdowns:
-  - references/brainstate/brainstate-control-flow-patterns.md
-  - references/brainstate/parameter-constraints-regularization.md
+  - brainstate-control-flow patterns
+  - parameter-constraints regularization
   - skill transformation-core
   - skill randomness-reproduction
-  - references/libraries/prebuilt-activation-library.md
-  - references/libraries/prebuilt-layer-library.md
+  - prebuilt-activation library
+  - prebuilt-layer library
   - Optimizer library
 - Script references:
   1. Image Classification with CNNs
@@ -358,11 +355,11 @@ brainx-install/
     - E/I SNN workflow route
     - SNN training route
   - Reference markdowns:
-    - references/brain-dynamics/brain-dynamics-delay-protocol.md
-    - references/brain-dynamics/brain-dynamics-event-driven-operators.md
-    - references/brainstate/brainstate-control-flow-patterns.md
-    - references/brainstate/transformation-grad-expansion.md
-    - references/libraries/solver-library-with-effects.md
+    - brain-dynamics-delay protocol
+    - brain-dynamics-event-driven operators
+    - brainstate-control-flow patterns
+    - transformation-grad expansion
+    - solver library with effects
   - Script references:
     - Example of simulating HH-cell
       - https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html
@@ -380,6 +377,7 @@ brainx-install/
 
 ### 3.10 braincell-singlecell
 
+- Target size: within 300 lines
 - What it covers:
   - Concept:
     - SingleCompartment
@@ -411,13 +409,13 @@ brainx-install/
     - BrainCell synapse class route
     - solver guidance
   - Reference markdowns:
-    - references/libraries/channel-library.md
-    - references/libraries/ion-library.md
-    - references/libraries/solver-library-with-effects.md
+    - channel library
+    - ion library
+    - solver library with effects
     - skill randomness and reproduction
-    - parameter and regularization.md
-    - references/braincell/braincell-custom-ion-channel-authoring.md
-    - references/braincell/braincell-manual-morphology-construction.md
+    - parameter and regularization
+    - braincell-custom-ion-channel authoring
+    - braincell-manual-morphology construction
   - Common failures:
     - using this skill when geometry matters
     - treating ion and channel as the same object
@@ -432,6 +430,7 @@ brainx-install/
 
 ### 3.11 braincell-multicompartment
 
+- Target size: within 350 lines
 - What it covers:
   - Concept:
     - morphology
@@ -479,15 +478,15 @@ brainx-install/
     - visualize topology
     - region and locset filter route
   - Reference markdowns:
-    - references/braincell/braincell-custom-ion-channel-authoring.md
-    - references/braincell/braincell-manual-morphology-construction.md
-    - ion library.md
-    - channel library.md
-    - morphology loading&validationmd
-    - filter function library.md
-    - solver library.md + effect of different integrations
-    - cv-policy-reference.md
-    - filter function library.md
+    - braincell-custom-ion-channel authoring
+    - braincell-manual-morphology construction
+    - ion library
+    - channel library
+    - morphology-io-loading validation
+    - filter function library
+    - solver library + effect of different integrations
+    - cv-policy reference
+    - filter function library
   - Script references:
     - undecided
   - Common failures:
@@ -540,10 +539,10 @@ brainx-install/
   - validation gates
   - acceleration audit response format
 - Reference markdowns:
-  - references/brainstate/brainstate-control-flow-patterns.md
-  - references/brainstate/transformation-grad-expansion.md
-  - references/brainstate/transformation-jit-expansion.md
-  - references/brainstate/transformation-vmap-expansion.md
+  - brainstate-control-flow patterns
+  - transformation-grad expansion
+  - transformation-jit expansion
+  - transformation-vmap expansion
 - Script references:
   - None
 - Common failures:
@@ -568,137 +567,180 @@ The reference layer below follows your uploaded Reference Markdown Plan. I chang
 
 ### 4.1 Brain Dynamics
 
-- `references/brain-dynamics/brain-dynamics-delay-protocol.md`
-  - Description: Explains BrainState Brain Dynamics delay APIs and delay-buffer behavior.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/02_synaptic_delays.html
-- `references/brain-dynamics/brain-dynamics-event-driven-operators.md`
-  - Description: Catalogs event-driven sparse spike operators and connectivity patterns for scalable SNNs.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html
+#### brain-dynamics-delay protocol
+
+- Description: Explains BrainState Brain Dynamics delay APIs and delay-buffer behavior.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/02_synaptic_delays.html
+
+#### brain-dynamics-event-driven operators
+
+- Description: Catalogs event-driven sparse spike operators and connectivity patterns for scalable SNNs.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html
 
 ### 4.2 BrainCell
 
-- `references/braincell/braincell-custom-ion-channel-authoring.md`
-  - Description: Custom BrainCell ion/channel authoring notes moved out of the skill list into shared reference markdown.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/concepts/ions_channels.html
-    - https://brainx.chaobrain.com/braincell/tutorials/channel.html
-    - https://brainx.chaobrain.com/braincell/developer/extending.html
-- `references/braincell/braincell-manual-morphology-construction.md`
-  - Description: Manual morphology construction and morphology-preparation notes moved out of the skill list into shared reference markdown.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/concepts/morphology.html
-- `references/braincell/morphology-io-loading-validation.md`
-  - Description: Unified reference for morphology import paths, validation reports/options, NeuroMorpho caching, and checkpoints.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/file_formats/overview.html
-    - https://brainx.chaobrain.com/braincell/file_formats/swc.html
-    - https://brainx.chaobrain.com/braincell/file_formats/asc.html
-    - https://brainx.chaobrain.com/braincell/file_formats/neuroml2.html
-    - https://brainx.chaobrain.com/braincell/file_formats/neuromorpho.html
-    - https://brainx.chaobrain.com/braincell/file_formats/checkpointing.html
-    - https://brainx.chaobrain.com/braincell/concepts/morphology.html
-- `references/braincell/probe-reference.md`
-  - Description: Documents BrainCell probes for recording runtime state, mechanism state, currents, and traces.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/tutorials/mech.html
-- `references/braincell/topology-building-and-visualization.md`
-  - Description: Guides runtime topology inspection and visualization for multicompartment BrainCell cells.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/tutorials/vis.html
-    - https://brainx.chaobrain.com/braincell/tutorials/filter.html
+#### braincell-custom-ion-channel authoring
+
+- Description: Custom BrainCell ion/channel authoring notes moved out of the skill list into shared reference markdown.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/concepts/ions_channels.html
+  - https://brainx.chaobrain.com/braincell/tutorials/channel.html
+  - https://brainx.chaobrain.com/braincell/developer/extending.html
+
+#### braincell-manual-morphology construction
+
+- Description: Manual morphology construction and morphology-preparation notes moved out of the skill list into shared reference markdown.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/concepts/morphology.html
+
+#### morphology-io-loading validation
+
+- Description: Unified reference for morphology import paths, validation reports/options, NeuroMorpho caching, and checkpoints.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/file_formats/overview.html
+  - https://brainx.chaobrain.com/braincell/file_formats/swc.html
+  - https://brainx.chaobrain.com/braincell/file_formats/asc.html
+  - https://brainx.chaobrain.com/braincell/file_formats/neuroml2.html
+  - https://brainx.chaobrain.com/braincell/file_formats/neuromorpho.html
+  - https://brainx.chaobrain.com/braincell/file_formats/checkpointing.html
+  - https://brainx.chaobrain.com/braincell/concepts/morphology.html
+
+#### probe reference
+
+- Description: Documents BrainCell probes for recording runtime state, mechanism state, currents, and traces.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/tutorials/mech.html
+
+#### topology-building-and visualization
+
+- Description: Guides runtime topology inspection and visualization for multicompartment BrainCell cells.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/tutorials/vis.html
+  - https://brainx.chaobrain.com/braincell/tutorials/filter.html
 
 ### 4.3 BrainState
 
-- `references/brainstate/advanced-randomness.md`
-  - Description: Catalogs advanced BrainState RNG streams, stochastic layers, and transformed-randomness patterns.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
-- `references/brainstate/brainstate-control-flow-patterns.md`
-  - Description: Collects loop and branch patterns that remain valid under BrainState and JAX transformations.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/05_control_flow.html
-- `references/brainstate/parameter-constraints-regularization.md`
-  - Description: Conceptual workflow for ParamState vs nn.Param, constrained values, regularization penalties, Const, and training-loss integration.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/core/05_parameters_transforms_regularization.html
-- `references/brainstate/parameter-containers-transforms-catalog.md`
-  - Description: Catalog for Param, Const, and built-in parameter transforms; maps constraints to transform choices.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/apis/nn/parameters.html
-- `references/brainstate/regularization-catalog-priors.md`
-  - Description: Catalog for classical, structural, chained, and prior-distribution regularizers; maps modeling goals to reg= choices.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/apis/nn/regularization.html
-- `references/brainstate/transformation-grad-expansion.md`
-  - Description: Expands gradient and autodiff teaching for differentiable simulation and parameter fitting.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/02_autodiff.html
-    - https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html
-    - https://brainx.chaobrain.com/brainstate/tutorials/core/05_parameters_transforms_regularization.html
-- `references/brainstate/transformation-jit-expansion.md`
-  - Description: Expands BrainState-aware JIT compilation, state write-back, cache, and static-argument guidance.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/01_jit_and_compilation.html
-    - https://brainx.chaobrain.com/brainstate/tutorials/core/06_transformations_essentials.html
-- `references/brainstate/transformation-vmap-expansion.md`
-  - Description: Expands BrainState vectorization, batching, state axes, sweeps, and stochastic vmap patterns.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/03_vectorization.html
-    - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/04_advanced_batching.html
+#### advanced randomness
+
+- Description: Catalogs advanced BrainState RNG streams, stochastic layers, and transformed-randomness patterns.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
+
+#### brainstate-control-flow patterns
+
+- Description: Collects loop and branch patterns that remain valid under BrainState and JAX transformations.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/05_control_flow.html
+
+#### parameter-constraints regularization
+
+- Description: Conceptual workflow for ParamState vs nn.Param, constrained values, regularization penalties, Const, and training-loss integration.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/05_parameters_transforms_regularization.html
+
+#### parameter-containers-transforms catalog
+
+- Description: Catalog for Param, Const, and built-in parameter transforms; maps constraints to transform choices.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/apis/nn/parameters.html
+
+#### regularization-catalog priors
+
+- Description: Catalog for classical, structural, chained, and prior-distribution regularizers; maps modeling goals to reg= choices.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/apis/nn/regularization.html
+
+#### transformation-grad expansion
+
+- Description: Expands gradient and autodiff teaching for differentiable simulation and parameter fitting.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/02_autodiff.html
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/05_parameters_transforms_regularization.html
+
+#### transformation-jit expansion
+
+- Description: Expands BrainState-aware JIT compilation, state write-back, cache, and static-argument guidance.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/01_jit_and_compilation.html
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/06_transformations_essentials.html
+
+#### transformation-vmap expansion
+
+- Description: Expands BrainState vectorization, batching, state axes, sweeps, and stochastic vmap patterns.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/03_vectorization.html
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/04_advanced_batching.html
 
 ### 4.4 Diagnostics
 
-- `references/diagnostics/brainstate-transformed-diagnostics.md`
-  - Description: Collects runtime debugging, checking, and error-handling patterns for transformed BrainState code.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/06_error_handling_and_checks.html
-    - https://brainx.chaobrain.com/brainstate/tutorials/transformations/07_debugging.html
-- `references/diagnostics/common-failures-index.md`
-  - Description: Maps recurring BrainX failure patterns to the skill or reference that should handle them.
-  - Mirror Source URLs:
-    - None — local cross-reference router.
+#### brainstate-transformed diagnostics
+
+- Description: Collects runtime debugging, checking, and error-handling patterns for transformed BrainState code.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/06_error_handling_and_checks.html
+  - https://brainx.chaobrain.com/brainstate/tutorials/transformations/07_debugging.html
+
+#### common-failures index
+
+- Description: Maps recurring BrainX failure patterns to the skill or reference that should handle them.
+- Mirror Source URLs:
+  - None — local cross-reference router.
 
 ### 4.5 Libraries
 
-- `references/libraries/channel-library.md`
-  - Description: Catalogs BrainCell channels and channel-modeling patterns.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/apis/braincell.channel.html
-    - https://brainx.chaobrain.com/braincell/tutorials/channel.html
-- `references/libraries/cv-policy-reference.md`
-  - Description: Catalogs BrainCell control-volume policies and discretization tradeoffs.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/concepts/discretization.html
-- `references/libraries/filter-function-library.md`
-  - Description: Catalogs BrainCell region and locset filters for targeting mechanisms, probes, and clamps.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/apis/filter.html
-- `references/libraries/ion-library.md`
-  - Description: Catalogs BrainCell ion species and ion-related modeling patterns.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/apis/braincell.ion.html
-- `references/libraries/prebuilt-activation-library.md`
-  - Description: Catalogs BrainState activation and normalization components for module-building tasks.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/apis/nn/activation.html
-- `references/libraries/prebuilt-layer-library.md`
-  - Description: Catalogs BrainState prebuilt layers so agents reuse existing components before writing custom modules.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/brainstate/apis/nn/linear.html
-    - https://brainx.chaobrain.com/brainstate/apis/nn/conv.html
-    - https://brainx.chaobrain.com/brainstate/apis/nn/normalization.html
-    - https://brainx.chaobrain.com/brainstate/apis/nn/pooling.html
-    - https://brainx.chaobrain.com/brainstate/apis/nn/padding.html
-    - https://brainx.chaobrain.com/brainstate/apis/nn/dropout.html
-- `references/libraries/solver-library-with-effects.md`
-  - Description: Catalogs BrainCell and BrainState solver and integration choices with modeling consequences.
-  - Mirror Source URLs:
-    - https://brainx.chaobrain.com/braincell/apis/integration.html
-    - https://brainx.chaobrain.com/braincell/integration/solvers.html
-    - https://brainx.chaobrain.com/braincell/integration/advanced.html
+#### channel library
+
+- Description: Catalogs BrainCell channels and channel-modeling patterns.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/apis/braincell.channel.html
+  - https://brainx.chaobrain.com/braincell/tutorials/channel.html
+
+#### cv-policy reference
+
+- Description: Catalogs BrainCell control-volume policies and discretization tradeoffs.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/concepts/discretization.html
+
+#### filter-function library
+
+- Description: Catalogs BrainCell region and locset filters for targeting mechanisms, probes, and clamps.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/apis/filter.html
+
+#### ion library
+
+- Description: Catalogs BrainCell ion species and ion-related modeling patterns.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/apis/braincell.ion.html
+
+#### prebuilt-activation library
+
+- Description: Catalogs BrainState activation and normalization components for module-building tasks.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/apis/nn/activation.html
+
+#### prebuilt-layer library
+
+- Description: Catalogs BrainState prebuilt layers so agents reuse existing components before writing custom modules.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/apis/nn/linear.html
+  - https://brainx.chaobrain.com/brainstate/apis/nn/conv.html
+  - https://brainx.chaobrain.com/brainstate/apis/nn/normalization.html
+  - https://brainx.chaobrain.com/brainstate/apis/nn/pooling.html
+  - https://brainx.chaobrain.com/brainstate/apis/nn/padding.html
+  - https://brainx.chaobrain.com/brainstate/apis/nn/dropout.html
+
+#### solver library with effects
+
+- Description: Catalogs BrainCell and BrainState solver and integration choices with modeling consequences.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braincell/apis/integration.html
+  - https://brainx.chaobrain.com/braincell/integration/solvers.html
+  - https://brainx.chaobrain.com/braincell/integration/advanced.html
 
 ## 5. Skill 测试与迭代方法
 
