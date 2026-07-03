@@ -44,7 +44,6 @@ brainx-install/
 
 - **Purpose:** Teach BrainX installation, backend selection, and validation.
 - **Target size:** Within 100-150 lines.
-- **Source mirrored:** None provided.
 
 #### Core Concepts
 
@@ -65,10 +64,6 @@ brainx-install/
 7. import validation.
 8. JAX device validation.
 
-#### Reference Routing
-
-- None.
-
 #### Script References
 
 - `brainx-install-verify.py`
@@ -88,7 +83,6 @@ brainx-install/
 
 - **Purpose:** Provide the global guardrail layer for damaging cross-framework mistakes.
 - **Target size:** Within 300-350 lines.
-- **Source mirrored:** None provided.
 - **Note:** 这个需要组里大家一起给一个 list, 具体归纳 agent 常犯的错误。
 
 #### Core Concepts
@@ -112,10 +106,6 @@ brainx-install/
 #### Reference Routing
 
 - common failure wiki
-
-#### Script References
-
-- None.
 
 #### Common Failures
 
@@ -152,18 +142,6 @@ brainx-install/
 1. scalar quantity example.
 2. array quantity example.
 
-#### Reference Routing
-
-- None.
-
-#### Script References
-
-- None.
-
-#### Common Failures
-
-- None listed.
-
 ### 3.4 `brainstate-state-management`
 
 #### Scope
@@ -193,10 +171,6 @@ brainx-install/
 - skill-transformation core.
 - randomness and reproducibility skill.
 
-#### Script References
-
-- None.
-
 #### Common Failures
 
 - mutating ordinary Python attributes instead of State.
@@ -210,7 +184,6 @@ brainx-install/
 
 - **Purpose:** Teach reusable BrainState Module construction and module composition.
 - **Target size:** Within 300 lines.
-- **Source mirrored:** None provided.
 
 #### Core Concepts
 
@@ -242,11 +215,11 @@ brainx-install/
 - Size Inference with Pooling & Flatten.
 - Skill for Deeplearning Training.
 - Skill for randomness and reproducibility.
-- Modern CNN script from “activation function and normalization [source](https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html)”.
+- Modern CNN script from “activation function and normalization”: https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html
 
 #### Script References
 
-- “Training Spiking Neural Network script” → [official tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
+- “Training Spiking Neural Network script” → https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html
 
 #### Common Failures
 
@@ -291,10 +264,6 @@ brainx-install/
 - transformation-jit expansion.
 - transformation-vmap expansion.
 - brainstate-transformed diagnostics.
-
-#### Script References
-
-- None.
 
 #### Common Failures
 
@@ -349,10 +318,6 @@ brainx-install/
 - parallel randomness.
 - stochastic brain-dynamics workflows.
 
-#### Script References
-
-- None.
-
 #### Common Failures
 
 - manually creating/splitting raw JAX keys by default.
@@ -389,7 +354,7 @@ brainx-install/
 
 #### General Scripts
 
-1. Mirror the scripts in [Training and metrics tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html).
+1. Mirror the scripts in https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html.
 
 #### Reference Routing
 
@@ -403,13 +368,9 @@ brainx-install/
 
 #### Script References
 
-- Image Classification with CNNs: Best normal supervised-training illustration: train/eval split, compiled train step, optimizer registration, loss, accuracy, validation loop. [Source](https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html).
-- Training Recurrent Neural Networks: Integrator Task: Best for temporal training: init_all_states, for_loop, sequence loss, L2 regularization, scheduler, recurrent state. [Source](https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html).
-- Training a Spiking Neural Network: Best for SNN-specific training: backpropagation through time, surrogate gradient, spk_fun=braintools.surrogate.ReluGrad(), for_loop, grad, optimizer update. [Source](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html).
-
-#### Common Failures
-
-- None listed.
+- Image Classification with CNNs: Best normal supervised-training illustration: train/eval split, compiled train step, optimizer registration, loss, accuracy, validation loop. Source: https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html
+- Training Recurrent Neural Networks: Integrator Task: Best for temporal training: init_all_states, for_loop, sequence loss, L2 regularization, scheduler, recurrent state. Source: https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html
+- Training a Spiking Neural Network: Best for SNN-specific training: backpropagation through time, surrogate gradient, spk_fun=braintools.surrogate.ReluGrad(), for_loop, grad, optimizer update. Source: https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html
 
 ### 3.9 `brainstate-brain-dynamics`
 
@@ -417,7 +378,6 @@ brainx-install/
 
 - **Purpose:** Teach BrainState brain dynamics workflows for dynamical systems and SNN routes.
 - **Target size:** Within 300 lines.
-- **Source mirrored:** None provided.
 
 #### Core Concepts
 
@@ -457,8 +417,8 @@ brainx-install/
 
 #### Script References
 
-- Example of simulating HH-cell: [source](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html).
-- Training a Spiking Neural Network: Best for SNN-specific training: backpropagation through time, surrogate gradient, spk_fun=braintools.surrogate.ReluGrad(), for_loop, grad, optimizer update. [Source](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html).
+- Example of simulating HH-cell. Source: https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html
+- Training a Spiking Neural Network: Best for SNN-specific training: backpropagation through time, surrogate gradient, spk_fun=braintools.surrogate.ReluGrad(), for_loop, grad, optimizer update. Source: https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html
 
 #### Common Failures
 
@@ -476,7 +436,6 @@ brainx-install/
 
 - **Purpose:** Teach BrainCell single-compartment point-neuron modeling.
 - **Target size:** within 300 lines.
-- **Source mirrored:** None provided.
 
 #### Core Concepts
 
@@ -518,10 +477,6 @@ brainx-install/
 - braincell-custom-ion-channel authoring.
 - braincell-manual-morphology construction.
 
-#### Script References
-
-- None.
-
 #### Common Failures
 
 - using this skill when geometry matters.
@@ -541,7 +496,6 @@ brainx-install/
 
 - **Purpose:** Teach BrainCell multicompartment modeling with morphology, mechanisms, probes, and clamps.
 - **Target size:** within 350 lines.
-- **Source mirrored:** None provided.
 
 #### Core Concepts
 
@@ -604,10 +558,6 @@ brainx-install/
 - cv-policy reference.
 - filter function library.
 
-#### Script References
-
-- undecided.
-
 #### Common Failures
 
 - using single-compartment skill when geometry matters.
@@ -626,7 +576,7 @@ brainx-install/
 #### Scope
 
 - **Purpose:** Teach transform-friendly BrainX acceleration patterns and audit guidance.
-- **Target size:** None provided.
+- **Version status:** first version ready.
 - **Source mirrored:** https://github.com/Wilsonnijc-bot/BrainX-skill/blob/main/skills/brainx-accelerate/SKILL.md
 - **Note:** 需要知道 AI 会出现的实际错误，现在根据 transformation 的内容写了 first version.
 
@@ -667,10 +617,6 @@ brainx-install/
 - transformation-grad expansion.
 - transformation-jit expansion.
 - transformation-vmap expansion.
-
-#### Script References
-
-- None.
 
 #### Common Failures
 
@@ -869,12 +815,10 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
 ### common-failures index
 
 - Description: Maps recurring BrainX failure patterns to the skill or reference that should handle them.
-- Mirror Source URLs:
-  - None — local cross-reference router.
 
 ## 5. Skill 测试与迭代方法
 
-已经写成了 skill: [brainx-skill-creator SKILL.md](https://github.com/Wilsonnijc-bot/brainx-skill-creator/blob/main/skills/brainx-skill-creator/SKILL.md)
+已经写成了 skill: brainx-skill-creator SKILL.md - https://github.com/Wilsonnijc-bot/brainx-skill-creator/blob/main/skills/brainx-skill-creator/SKILL.md
 
 流程分为五步。
 
