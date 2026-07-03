@@ -955,6 +955,44 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
 | CNN training | module, training, randomness | layer/activation library | medium | optional |
 | Acceleration rewrite | accelerate, transform | jit/vmap/control-flow | hard | yes |
 
+### 6.5 Accelerate Skill 专项 Benchmark
+
+Accelerate skill 需要单独设置 benchmark，因为它的目标不是让 agent 重新写一个 BrainX 模型，而是让 agent 识别已有实现中的性能瓶颈，并把普通 BrainX 代码改写成 transformation-aware 的高性能实现。
+
+#### Baseline 设置
+
+让 agent 在看不到任何 transformation 相关 skill 的情况下完成同一个任务。
+
+观察重点：
+
+- 是否写出低效 Python loop。
+- 是否出现重复计算、手动 batch 处理、手动参数 sweep。
+- 是否用 generic NumPy / JAX 代替 BrainState transformation。
+- 是否缺少明确的 jit、vmap、scan / for_loop、grad 重写思路。
+
+#### New Skill 设置
+
+让 agent 使用 accelerate + transformation skill bundle 浏览 workspace，并对同一个任务进行加速改写。
+
+观察重点：
+
+- 是否能识别原始代码中的性能瓶颈。
+- 是否主动使用 BrainState 的 jit、vmap、scan / for_loop、grad 等 transformation 重写核心计算。
+- 是否把时间循环、batch 维度、参数 sweep、训练梯度等结构映射到合适的 transformation。
+- 是否保持 BrainX-native 代码结构，而不是只写 generic JAX 加速代码。
+
+#### 对比重点
+
+- agent 是否从普通实现转向 BrainState transformation workflow。
+- 是否避免继续使用低效 Python loop 作为核心计算。
+- 是否把加速边界放在完整 step / simulation / train step 上，而不是零散 helper function。
+- 是否保持 State、ParamState、RandomState 的 BrainState 语义。
+- 生成的代码是否更接近可编译、可扩展、适合大规模仿真的实现。
+
+#### 验收标准
+
+Accelerate skill 的验收标准不是“有没有提到加速”，而是看它是否真的让 agent 把一个普通 BrainX 实现改写成结构正确、transformation 使用合理、性能意识明确的 BrainX-native 高性能实现。
+
 ## 7. 版本与发布策略
 
 - 每个 skill 和 reference markdown 都得绑定明确的版本状态，确保和 BrainX 本身代码迭代版本一致。
