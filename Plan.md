@@ -3,7 +3,7 @@
 ## 目录
 
 1. [设计目标与整体原则](#1-设计目标与整体原则)
-2. [Current Skill List](#2-current-skill-list)
+2. [Primary Skill List](#2-primary-skill-list)
 3. [Skill Layer Design](#3-skill-layer-design)
 4. [Reference Layer Illustration](#4-reference-layer-illustration)
 5. [Skill 测试与迭代方法](#5-skill-测试与迭代方法)
@@ -14,71 +14,29 @@
 
 需求：computational neuroscience 有关的科研人员需要使用 BrainX 的代码框架建模，现在普遍使用 AI agent 做 coding，所以这套 skill 需要教会 AI agent 使用 BrainX 的框架。
 
-根据 AI agent 的上下文性质，整个 skill 设计遵从渐进式披露的思想，以达到高效的 token使用，把信息分成 2 层：
+根据 AI agent 的上下文性质，整个 skill 设计遵从渐进式披露的思想，以达到高效的 token 使用，把信息分成 2 层：
 
-- skill 层：最核心且代表大方向的知识点。
-- reference 层：大方向之下发散知识点以及最完整样例代码，让 agent 去点击。
+- skill 层：核心 agent task boundaries，只保留最常触发、最能决定建模路线的知识点和 canonical workflow。
+- reference 层：specialized、long-tail、environment、optimization、advanced examples，以及完整脚本样例；只在 primary skill 的 routing 条件命中时打开。
 
-## 2. Current Skill List
+Primary skill 不应该膨胀成完整文档摘要；reference 承接高级变体、环境问题、性能审计和可复用脚本，这样 agent 先判断任务边界，再按需点击更深材料。
+
+## 2. Primary Skill List
 
 ```text
 braincell-multicompartment/
 braincell-singlecell/
-brainstate-brain-dynamics/
 brainstate-deeplearning-training/
 brainstate-module-building/
-brainstate-randomness-reproducibility/
 brainstate-state-management/
 brainstate-transformations-core/
 brainunit-quantity-safety/
-brainx-accelerate/
 brainx-general-guard/
-brainx-install/
 ```
 
 ## 3. Skill Layer Design
 
-### 3.1 `brainx-install`
-
-#### Scope
-
-- **Purpose:** Teach BrainX installation, backend selection, and validation.
-- **Target size:** Within 100-150 lines.
-
-#### Core Concepts
-
-- BrainX meta-package.
-- Python and pip requirements.
-- CPU / GPU / TPU backend choice.
-- CUDA install path.
-- pinned BrainX release for reproducibility.
-
-#### General Scripts
-
-1. ask-before-install environment checklist.
-2. quick install: `pip install -U BrainX`.
-3. CPU install.
-4. CUDA 12/13 install.
-5. TPU install.
-6. exact release pinning.
-7. import validation.
-8. JAX device validation.
-
-#### Script References
-
-- `brainx-install-verify.py` (planned bundled script reference): executable validation check for BrainX import and `jax.devices()`. Source: [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html).
-- `brainx-install-commands.sh` (planned bundled script reference): official command list for full, CPU, CUDA 12, CUDA 13, TPU, pinned, and source installs. Source: [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html).
-
-#### Common Failures
-
-- installing before identifying backend.
-- unsupported Python version.
-- old pip / setuptools / wheel.
-- wrong CUDA/JAX wheel.
-- installing only raw JAX when BrainCell/BrainUnit is needed.
-- assuming GPU works without checking `jax.devices()`.
-
-### 3.2 `brainx-general-guard`
+### 3.1 `brainx-general-guard`
 
 #### Scope
 
@@ -106,7 +64,15 @@ brainx-install/
 
 #### Reference Routing
 
-- common failure wiki
+- `brainx-install`: open when the task involves install, setup, package import failure, version pinning, backend selection, CUDA/GPU/TPU, JAX wheel mismatch, or `jax.devices()` validation.
+- common failure wiki.
+
+Normal modeling skills should not route directly to install unless they hit an environment, import, or backend failure. Environment triage starts here.
+
+#### Tiny RNG Block
+
+- If randomness appears in a guardrail task, require explicit seed control and avoid raw NumPy/JAX RNG inside transformed BrainState code.
+- For reproducible experiments, random trials, stochastic modules, dropout/noise, RNG under transforms, or seed-control questions, route to `brainstate-randomness-reproducibility`.
 
 #### Common Failures
 
@@ -118,7 +84,7 @@ brainx-install/
 - writing custom ion/channel before checking built-in libraries.
 - inventing BrainX APIs instead of opening official examples.
 
-### 3.3 `brainunit-quantity-safety`
+### 3.2 `brainunit-quantity-safety`
 
 #### Scope
 
@@ -143,7 +109,7 @@ brainx-install/
 1. scalar quantity example.
 2. array quantity example.
 
-### 3.4 `brainstate-state-management`
+### 3.3 `brainstate-state-management`
 
 #### Scope
 
@@ -169,12 +135,12 @@ brainx-install/
 
 #### Script References
 
-- `skills/brainstate-state-management/references/scripts/lif_neuron_model.py` (local script): State-management LIF example showing `HiddenState`, `ShortTermState`, `ParamState`, and explicit `.value` reads/writes in one model. Source: [State Management](https://brainx.chaobrain.com/brainstate/tutorials/core/01_state_and_pytrees.html).
+- `skills/brainstate-state-management/references/scripts/lif_neuron_model.py` (local script): State-management LIF example showing `HiddenState`, `ShortTermState`, `ParamState`, and explicit `.value` reads/writes in one model. Source mirrored: [State Management](https://brainx.chaobrain.com/brainstate/tutorials/core/01_state_and_pytrees.html).
 
 #### Reference Routing
 
-- skill-transformation core.
-- randomness and reproducibility skill.
+- `brainstate-transformations-core`.
+- `brainstate-randomness-reproducibility` only when state updates include RNG streams, reproducible trials, or stochastic state transitions.
 
 #### Common Failures
 
@@ -183,7 +149,7 @@ brainx-install/
 - confusing ParamState with runtime hidden state.
 - forgetting that transformed BrainState code tracks State reads/writes.
 
-### 3.5 `brainstate-module-building`
+### 3.4 `brainstate-module-building`
 
 #### Scope
 
@@ -206,25 +172,25 @@ brainx-install/
 3. prebuilt activation example, e.g. Sigmoid.
 4. nesting and nested module example.
 5. ResidualBlock example.
-6. HH model script HH Neuron model under Brain Dynamics.
+6. dynamics-module route for HH/LIF/SNN workflows.
 7. Sequential,.desc() layer construction,size inference.
 8. `->ComplexNet` example with convolution, pooling, flatten, linear.
 9. full script example ModernCNN from tutorial.
 
 #### Reference Routing
 
-- Pre-built Activation Functions.
-- Pre-built Basic Layers.
-- parameters and regularization.
-- Size Inference with Convolution.
-- Size Inference with Pooling & Flatten.
-- Skill for Deeplearning Training.
-- Skill for randomness and reproducibility.
+- prebuilt-activation library.
+- prebuilt-layer library.
+- parameter-constraints regularization.
+- size inference references for convolution, pooling, and flatten.
+- `brainstate-deeplearning-training`.
+- `brainstate-dynamics`: open when the task involves dynamics modules, LIF/SNN populations, temporal simulation, delays, event-driven spike communication, or neural population workflows.
+- `brainstate-randomness-reproducibility` only when modules include stochastic layers, dropout/noise, random trials, or reproducibility constraints.
 
 #### Script References
 
-- `skills/brainstate-module-building/references/scripts/modern_cnn.py` (local script): full module-composition reference using `Conv2d`, `BatchNorm2d`, `GELU`, `MaxPool2d`, `Linear`, `LayerNorm`, and `Dropout`. Source: [Activation Functions and Normalization](https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html).
-- Building an SNN tutorial script (external tutorial-script reference): optional dynamics-network composition reference for `LIF` populations, projections, synapses, event communication, and composed E/I networks. Source: [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html).
+- `skills/brainstate-module-building/references/scripts/modern_cnn.py` (local script): full module-composition reference using `Conv2d`, `BatchNorm2d`, `GELU`, `MaxPool2d`, `Linear`, `LayerNorm`, and `Dropout`. Source mirrored: [Activation Functions and Normalization](https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html).
+- Building an SNN tutorial script (external tutorial-script reference): optional dynamics-network composition reference for `LIF` populations, projections, synapses, event communication, and composed E/I networks. Source mirrored: [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html).
 
 #### Common Failures
 
@@ -234,11 +200,11 @@ brainx-install/
 - missing shape inference rules.
 - nesting modules without checking state collection.
 
-### 3.6 `brainstate-transformations-core`
+### 3.5 `brainstate-transformations-core`
 
 #### Scope
 
-- **Purpose:** Teach basic BrainState-aware transformations.
+- **Purpose:** Teach BrainState-aware `jit`, `grad`, `vmap`, control-flow transforms, state-safe transform composition, and performance-oriented transform decisions.
 - **Target size:** Within 150-200 lines.
 - **Source mirrored:** https://brainx.chaobrain.com/brainstate/tutorials/core/06_transformations_essentials.html
 
@@ -248,9 +214,11 @@ brainx-install/
 - difference from raw JAX.
 - state read/write tracking.
 - `brainstate.transform.jit`, `grad`, `vmap`.
+- control-flow transforms for loops and branches.
 - composed transforms.
 - raw JAX boundary.
 - transform over modules and states.
+- compile/runtime separation and performance-oriented transform boundaries.
 
 #### General Scripts
 
@@ -261,6 +229,7 @@ brainx-install/
 5. parameter update using gradient keys.
 6. minimal vmap over batch.
 7. composed train-step transform.
+8. choose JIT/vectorization/control-flow boundaries for performance-sensitive code.
 
 #### Reference Routing
 
@@ -268,6 +237,7 @@ brainx-install/
 - transformation-grad expansion.
 - transformation-jit expansion.
 - transformation-vmap expansion.
+- `brainx-acceleration-audit`: open if the task asks for speed, acceleration, GPU performance, batching, vectorization, parameter sweeps, many neurons/trials, compile/runtime separation, memory reduction, throughput, multi-device execution, or performance audit.
 - brainstate-transformed diagnostics.
 
 #### Common Failures
@@ -279,59 +249,7 @@ brainx-install/
 - updating parameters outside the gradient key structure.
 - using control-flow transforms without checking the control-flow reference.
 
-### 3.7 `brainstate-randomness-reproducibility`
-
-#### Scope
-
-- **Purpose:** Teach basic BrainState randomness for random trials and reproducible experiments.
-- **Target size:** Within 150-200 lines.
-- **Source mirrored:** https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
-
-#### Core Concepts
-
-- Key Features.
-- Automatic key splitting.
-- NumPy compatibility.
-- Stateful interface.
-- JIT compatible.
-- `brainstate.random` as the default RNG interface + script.
-- reproducibility through `brainstate.random.seed(seed)` + script.
-- global DEFAULT RandomState.
-- common random functions: random, rand, randn.
-- stochastic module behavior.
-- train-only randomness.
-- `brainstate.environ.get('fit', False)`.
-- Choice and Permutation & shuffle array.
-
-#### General Scripts
-
-1. `brainstate.random` default RNG interface script.
-2. `brainstate.random.seed(seed)` reproducibility script.
-
-#### Reference Routing
-
-- advanced randomness.
-- manual key control.
-- custom RandomState.
-- independent random streams.
-- checkpoint RNG save/restore.
-- temporary seed context.
-- default_rng.
-- clone_rng.
-- probability distribution catalog.
-- transformed randomness.
-- parallel randomness.
-- stochastic brain-dynamics workflows.
-
-#### Common Failures
-
-- manually creating/splitting raw JAX keys by default.
-- forgetting to seed reproducible examples.
-- using np.random in transformed BrainState code.
-- reusing the same randomness across mapped trials.
-- applying dropout/noise during evaluation.
-
-### 3.8 `brainstate-deeplearning-training`
+### 3.6 `brainstate-deeplearning-training`
 
 #### Scope
 
@@ -365,79 +283,25 @@ brainx-install/
 
 - brainstate-control-flow patterns.
 - parameter-constraints regularization.
-- skill transformation-core.
-- skill randomness-reproduction.
+- `brainstate-transformations-core`.
+- `brainstate-randomness-reproducibility` when stochastic training, dropout, fit mode, random data, noise, random trials, or seed-controlled experiments are involved.
 - prebuilt-activation library.
 - prebuilt-layer library.
 - braintools optimizer library.
 
-#### Script References
+#### Tiny RNG Block
 
-- Image Classification with CNNs (external tutorial-script reference): normal supervised-training illustration for train/eval split, compiled train step, optimizer registration, loss, accuracy, and validation loop. Source: [Image Classification with CNNs](https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html).
-- `skills/brainstate-deeplearning-training/references/scripts/integrator_rnn.py` (local script): stateful sequence-training reference with synthetic temporal data, custom `RNNCell`, trainable initial state, `ParamState` collection, Adam optimizer, JIT prediction/training steps, gradient update, L2 regularization, epoch loop, and evaluation plot. Source: [Training Recurrent Neural Networks](https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html).
-- `training-snn.py` (planned bundled script reference): representative BrainState/BrainCell SNN training workflow; use when a task crosses from simulation into optimization. Source: [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
-
-
-### 3.9 `brainstate-brain-dynamics`
-
-#### Scope
-
-- **Purpose:** Teach BrainState brain dynamics workflows for dynamical systems and SNN routes.
-- **Target size:** Within 300 lines.
-
-#### Core Concepts
-
-- brain models as dynamical systems.
-- state variables evolving over time, `update()`.
-- element-wise update principle.
-- architecture flow: input, connection modules, dynamics modules, output.
-- input / output / states / parameters.
-- before-update hooks.
-- after-update hooks.
-- in_size.
-- out_size.
-- delay support.
-- BrainPy-state SNN workflow boundary.
-- BrainCell boundary.
-
-#### General Scripts
-
-1. simulation time-step setup.
-2. minimal exponential decay Dynamics module.
-3. minimal LIF Dynamics module.
-4. simulation loop with `brainstate.transform.for_loop`.
-5. before-update hook.
-6. after-update hook.
-7. delay support pattern: output_delay, prefetch_delay.
-8. BrainPy-state LIF population example.
-9. E/I SNN workflow route.
-10. SNN training route.
-
-#### Reference Routing
-
-- brain-dynamics-delay protocol.
-- brain-dynamics-event-driven operators.
-- brainstate-control-flow patterns.
-- transformation-grad expansion.
-- solver library with effects.
+- For stochastic training examples, set or document the seed and keep training-only randomness behind fit-mode behavior.
+- Use `fit=True` for dropout/noise during training and `fit=False` for evaluation; open `brainstate-randomness-reproducibility` before writing RNG-heavy data generation or transformed stochastic steps.
 
 #### Script References
 
-- `hodgkin-huxley-neuron.py` (planned bundled script reference): complete executable HH neuron example for BrainState brain-dynamics workflows with biophysical state variables and continuous-time dynamics. Source: [Hodgkin-Huxley Neuron Model](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html).
-- `building-ei-snn.py` (planned bundled script reference): complete E/I spiking-network simulation workflow with `init_all_states` and compiled trajectory. Source: [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html).
-- `training-snn.py` (planned bundled script reference): representative BrainState/BrainCell SNN training workflow; use when the task crosses from simulation into optimization. Source: [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
+- Image Classification with CNNs (external tutorial-script reference): normal supervised-training illustration for train/eval split, compiled train step, optimizer registration, loss, accuracy, and validation loop. Source mirrored: [Image Classification with CNNs](https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html).
+- `skills/brainstate-deeplearning-training/references/scripts/integrator_rnn.py` (local script): stateful sequence-training reference with synthetic temporal data, custom `RNNCell`, trainable initial state, `ParamState` collection, Adam optimizer, JIT prediction/training steps, gradient update, L2 regularization, epoch loop, and evaluation plot. Source mirrored: [Training Recurrent Neural Networks](https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html).
+- `training-snn.py` (planned bundled script reference): representative BrainState/BrainCell SNN training workflow; use when a task crosses from simulation into optimization. Source mirrored: [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
 
-#### Common Failures
 
-- putting synaptic connectivity inside `Dynamics.update()`.
-- forgetting to implement `update()`.
-- using unitless time/current/voltage.
-- using long Python loops instead of for_loop.
-- forgetting time context inside step functions.
-- manually managing delay buffers.
-- treating BrainState brain dynamics as BrainCell morphology modeling.
-
-### 3.10 `braincell-singlecell`
+### 3.7 `braincell-singlecell`
 
 #### Scope
 
@@ -479,20 +343,20 @@ brainx-install/
 - channel library.
 - ion library.
 - solver library with effects.
-- skill randomness and reproduction.
+- `brainstate-randomness-reproducibility` only for random trials, noise, parameter sweeps, or reproducibility constraints.
 - parameter and regularization.
 - braincell-custom-ion-channel authoring.
 - braincell-manual-morphology construction.
 
 #### Script References
 
-- `skills/braincell-singlecell/references/scripts/hh_neuron_basics.py` (local script): default end-to-end HH point-neuron current-clamp script using `SingleCompartment`, Na/K/leak currents, `init_state`, `update(I)`, `for_loop`, and voltage/spike plotting. Source: [Your First Hodgkin Huxley Neuron](https://brainx.chaobrain.com/braincell/examples/hh_neuron_basics.html).
-- `skills/braincell-singlecell/references/scripts/fi_curve.py` (local script): current-sweep and FI-curve reference for vectorized independent point neurons, warm-up discard, spike counting, and firing-rate extraction. Source: [Frequency Current Curve](https://brainx.chaobrain.com/braincell/examples/fi_curve.html).
-- `skills/braincell-singlecell/references/scripts/channel_ablation.py` (local script): intact-vs-ablated point-neuron comparison reference, especially for setting channel conductance to zero while preserving the ion/channel structure. Source: [Channel Ablation](https://brainx.chaobrain.com/braincell/examples/channel_ablation.html).
-- `skills/braincell-singlecell/references/scripts/spike_frequency_adaptation.py` (local script): advanced single-cell reference for calcium-dependent spike-frequency adaptation, dynamic calcium, `MixIons(k, ca)`, and AHP/KCa mechanisms. Source: [Spike Frequency Adaptation](https://brainx.chaobrain.com/braincell/examples/spike_frequency_adaptation.html).
-- `skills/braincell-singlecell/references/scripts/t_current_rebound.py` (local script): advanced single-cell reference for post-inhibitory rebound, T-type calcium current, thalamic-style rebound bursting, and hyperpolarizing current protocols. Source: [T Current Rebound](https://brainx.chaobrain.com/braincell/examples/t_current_rebound.html).
-- `skills/braincell-singlecell/references/scripts/thalamic_neurons.py` (local script): advanced phenotype-comparison script for richer thalamic point-neuron variants, multiple channel compositions, calcium dynamics, HCN/AHP/T-type mechanisms, and phenotype comparison. Source: [Thalamic Neurons](https://brainx.chaobrain.com/braincell/examples/thalamic_neurons.html).
-- `skills/braincell-singlecell/references/scripts/calcium_channel_gating.py` (local script): channel-level diagnostic script for voltage-dependent gating curves, steady-state activation/inactivation, low-threshold vs high-threshold calcium channel comparison, and direct channel-method inspection. Source: [Calcium Channel Gating](https://brainx.chaobrain.com/braincell/examples/calcium_channel_gating.html).
+- `skills/braincell-singlecell/references/scripts/hh_neuron_basics.py` (local script): default end-to-end HH point-neuron current-clamp script using `SingleCompartment`, Na/K/leak currents, `init_state`, `update(I)`, `for_loop`, and voltage/spike plotting. Source mirrored: [Your First Hodgkin Huxley Neuron](https://brainx.chaobrain.com/braincell/examples/hh_neuron_basics.html).
+- `skills/braincell-singlecell/references/scripts/fi_curve.py` (local script): current-sweep and FI-curve reference for vectorized independent point neurons, warm-up discard, spike counting, and firing-rate extraction. Source mirrored: [Frequency Current Curve](https://brainx.chaobrain.com/braincell/examples/fi_curve.html).
+- `skills/braincell-singlecell/references/scripts/channel_ablation.py` (local script): intact-vs-ablated point-neuron comparison reference, especially for setting channel conductance to zero while preserving the ion/channel structure. Source mirrored: [Channel Ablation](https://brainx.chaobrain.com/braincell/examples/channel_ablation.html).
+- `skills/braincell-singlecell/references/scripts/spike_frequency_adaptation.py` (local script): advanced single-cell reference for calcium-dependent spike-frequency adaptation, dynamic calcium, `MixIons(k, ca)`, and AHP/KCa mechanisms. Source mirrored: [Spike Frequency Adaptation](https://brainx.chaobrain.com/braincell/examples/spike_frequency_adaptation.html).
+- `skills/braincell-singlecell/references/scripts/t_current_rebound.py` (local script): advanced single-cell reference for post-inhibitory rebound, T-type calcium current, thalamic-style rebound bursting, and hyperpolarizing current protocols. Source mirrored: [T Current Rebound](https://brainx.chaobrain.com/braincell/examples/t_current_rebound.html).
+- `skills/braincell-singlecell/references/scripts/thalamic_neurons.py` (local script): advanced phenotype-comparison script for richer thalamic point-neuron variants, multiple channel compositions, calcium dynamics, HCN/AHP/T-type mechanisms, and phenotype comparison. Source mirrored: [Thalamic Neurons](https://brainx.chaobrain.com/braincell/examples/thalamic_neurons.html).
+- `skills/braincell-singlecell/references/scripts/calcium_channel_gating.py` (local script): channel-level diagnostic script for voltage-dependent gating curves, steady-state activation/inactivation, low-threshold vs high-threshold calcium channel comparison, and direct channel-method inspection. Source mirrored: [Calcium Channel Gating](https://brainx.chaobrain.com/braincell/examples/calcium_channel_gating.html).
 
 #### Common Failures
 
@@ -507,7 +371,7 @@ brainx-install/
 - interpreting V_th as a conductance parameter.
 - custom authoring before checking built-in ion/channel libraries.
 
-### 3.11 `braincell-multicompartment`
+### 3.8 `braincell-multicompartment`
 
 #### Scope
 
@@ -574,10 +438,11 @@ brainx-install/
 - solver library + effect of different integrations.
 - cv-policy reference.
 - filter function library.
+- `brainstate-randomness-reproducibility` only for random trials, noise, parameter sweeps, or reproducibility constraints.
 
 #### Script References
 
-- `skills/braincell-multicompartment/references/cell_multicompartment_reference.py` (local script): primary full-script reference for turning an SWC morphology into a simulation-ready multicompartment `Cell`; covers `Morphology.from_swc`, `Cell`, CVs, CV policies, `init_state`, `node_tree`, `paint`, `place`, `CurrentClamp`, `StateProbe`, and minimal `run` simulation. Source: [Cell in BrainCell](https://brainx.chaobrain.com/braincell/tutorials/cell.html).
+- `skills/braincell-multicompartment/references/cell_multicompartment_reference.py` (local script): primary full-script reference for turning an SWC morphology into a simulation-ready multicompartment `Cell`; covers `Morphology.from_swc`, `Cell`, CVs, CV policies, `init_state`, `node_tree`, `paint`, `place`, `CurrentClamp`, `StateProbe`, and minimal `run` simulation. Source mirrored: [Cell in BrainCell](https://brainx.chaobrain.com/braincell/tutorials/cell.html).
 
 #### Common Failures
 
@@ -592,75 +457,78 @@ brainx-install/
 - forgetting cell.init_state().
 - expecting probes to own evolving state instead of sampling runtime state.
 
-### 3.12 `brainx-accelerate`
-
-#### Scope
-
-- **Purpose:** Teach transform-friendly BrainX acceleration patterns and audit guidance.
-- **Version status:** first version ready.
-- **Source mirrored:** https://github.com/Wilsonnijc-bot/BrainX-skill/blob/main/skills/brainx-accelerate/SKILL.md
-- **Note:** 需要知道 AI 会出现的实际错误，现在根据 transformation 的内容写了 first version.
-
-#### Core Concepts
-
-- transform-friendly BrainX programs.
-- correctness before speed.
-- state/RNG safety.
-- shape stability.
-- warm runtime vs compile time.
-- multi-device scale.
-- Axis map: N = neurons / synapses / features / compartments; T = time / recurrent steps; B = batch / trials / stimuli / subjects; E = ensemble / parameter sweep / seeds; P = trainable parameters / sensitivities; D = devices.
-- BrainState transforms for stateful code.
-- JAX transforms only for pure functions.
-- jnp in transformed numerical paths.
-- np only for host preprocessing.
-- Explicit State, ParamState, RandomState.
-- Stable shapes and PyTrees.
-- Sparse/event representation preservation.
-
-#### General Scripts
-
-1. rewrite N scalar loops into array state.
-2. rewrite T Python loops into scan / for_loop / while_loop.
-3. rewrite B loops into vmap.
-4. rewrite E sweeps into mapped states / params / RNG.
-5. rewrite finite differences into grad.
-6. choose JIT boundary.
-7. compose jit, scan, vmap, grad.
-8. handle randomness under vmap.
-9. decide when multi-device is appropriate.
-10. validation gates.
-11. acceleration audit response format.
-
-#### Reference Routing
-
-- brainstate-control-flow patterns.
-- transformation-grad expansion.
-- transformation-jit expansion.
-- transformation-vmap expansion.
-
-#### Common Failures
-
-- sprinkling jit everywhere.
-- compiling tiny helpers inside loops.
-- using raw JAX transform around BrainState state.
-- Python loops over time/batches/sweeps.
-- finite-difference gradients.
-- dynamic list history.
-- full-history memory blowup.
-- dynamic shapes.
-- hidden mutable attributes.
-- ambiguous state under vmap.
-- RNG reuse.
-- host sync in hot paths.
-- accidental densification of sparse/event connectivity.
-- claiming speedup from first-call compile time.
-
 ## 4. Reference Layer Illustration
 
 The reference layer below follows your uploaded Reference Markdown Plan. Source mirrors use literal HTML links.
 
 ### 4.1 Brain Dynamics related references
+
+### brainstate-dynamics
+
+- Description: Specialized BrainState Module pattern reference for time-evolving systems, `Dynamics.update()`, SNN workflows, delays, hooks, event-driven operators, and neural population workflows. Primary route: `brainstate-module-building`.
+
+#### Scope
+
+- **Purpose:** Support BrainState brain-dynamics workflows for dynamical systems and SNN routes without making them a primary skill boundary.
+- **Target size:** Reference markdown can be longer than a primary skill, but should stay task-routable.
+
+#### Core Concepts
+
+- brain models as dynamical systems.
+- state variables evolving over time, `update()`.
+- element-wise update principle.
+- architecture flow: input, connection modules, dynamics modules, output.
+- input / output / states / parameters.
+- before-update hooks.
+- after-update hooks.
+- in_size.
+- out_size.
+- delay support.
+- BrainPy-state SNN workflow boundary.
+- BrainCell boundary.
+
+#### General Scripts
+
+1. simulation time-step setup.
+2. minimal exponential decay Dynamics module.
+3. minimal LIF Dynamics module.
+4. simulation loop with `brainstate.transform.for_loop`.
+5. before-update hook.
+6. after-update hook.
+7. delay support pattern: output_delay, prefetch_delay.
+8. BrainPy-state LIF population example.
+9. E/I SNN workflow route.
+10. SNN training route.
+
+#### Reference Routing
+
+- brain-dynamics-delay protocol.
+- brain-dynamics-event-driven operators.
+- brainstate-control-flow patterns.
+- transformation-grad expansion.
+- solver library with effects.
+- `brainstate-randomness-reproducibility` when dynamics tasks involve random trials, stochastic inputs, noisy populations, parameter sweeps, or reproducibility.
+
+#### Tiny RNG Block
+
+- For stochastic dynamics, seed trial/noise setup explicitly before simulation.
+- Under mapped SNN trials or noisy populations, do not reuse one identical RNG stream across all trials; open `brainstate-randomness-reproducibility`.
+
+#### Script References
+
+- `hodgkin-huxley-neuron.py` (planned bundled script reference): complete executable HH neuron example for BrainState brain-dynamics workflows with biophysical state variables and continuous-time dynamics. Source mirrored: [Hodgkin-Huxley Neuron Model](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html).
+- `building-ei-snn.py` (planned bundled script reference): complete E/I spiking-network simulation workflow with `init_all_states` and compiled trajectory. Source mirrored: [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html).
+- `training-snn.py` (planned bundled script reference): representative BrainState/BrainCell SNN training workflow; use when the task crosses from simulation into optimization. Source mirrored: [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
+
+#### Common Failures
+
+- putting synaptic connectivity inside `Dynamics.update()`.
+- forgetting to implement `update()`.
+- using unitless time/current/voltage.
+- using long Python loops instead of for_loop.
+- forgetting time context inside step functions.
+- manually managing delay buffers.
+- treating BrainState brain dynamics as BrainCell morphology modeling.
 
 ### brain-dynamics-delay protocol
 
@@ -717,11 +585,53 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
 
 ### 4.3 BrainState related references
 
-### advanced randomness
+### brainstate-randomness-reproducibility
 
-- Description: Catalogs advanced BrainState RNG streams, stochastic layers, and transformed-randomness patterns.
+- Description: Reusable reference for reproducible experiments, random trials, stochastic modules, dropout/noise, RNG under transforms, and seed control.
 - Mirror Source URLs:
   - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
+
+#### Scope
+
+- **Purpose:** Teach BrainState randomness only when the task actually needs reproducibility or stochastic behavior.
+- **Target size:** Reference markdown can include advanced variants and catalog material that would bloat primary skills.
+
+#### Core Concepts
+
+- Key Features.
+- Automatic key splitting.
+- NumPy compatibility.
+- Stateful interface.
+- JIT compatible.
+- `brainstate.random` as the default RNG interface + script.
+- reproducibility through `brainstate.random.seed(seed)` + script.
+- global DEFAULT RandomState.
+- common random functions: random, rand, randn.
+- stochastic module behavior.
+- train-only randomness.
+- `brainstate.environ.get('fit', False)`.
+- Choice and Permutation & shuffle array.
+
+#### General Scripts
+
+1. `brainstate.random` default RNG interface script.
+2. `brainstate.random.seed(seed)` reproducibility script.
+
+#### Secondary References
+
+##### advanced randomness
+
+- Description: Catalogs manual key control, custom RandomState, independent random streams, checkpoint RNG save/restore, temporary seed context, default_rng, clone_rng, distribution catalog, transformed randomness, parallel randomness, and stochastic brain-dynamics workflows.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html
+
+#### Common Failures
+
+- manually creating/splitting raw JAX keys by default.
+- forgetting to seed reproducible examples.
+- using np.random in transformed BrainState code.
+- reusing the same randomness across mapped trials.
+- applying dropout/noise during evaluation.
 
 ### brainstate-control-flow patterns
 
@@ -771,6 +681,78 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
   - https://brainx.chaobrain.com/brainstate/tutorials/transformations/04_advanced_batching.html
 
 ### 4.4 Diagnostics related references
+
+### brainx-acceleration-audit
+
+- Description: Transform-friendly BrainX acceleration and performance-audit reference. Primary route: `brainstate-transformations-core`.
+- Migration note: existing acceleration draft content moves into this reference; do not keep a separate primary skill boundary.
+
+#### Scope
+
+- **Purpose:** Teach transform-friendly BrainX acceleration patterns and audit guidance without making acceleration a primary task boundary.
+- **Version status:** first version ready.
+- **Note:** 需要知道 AI 会出现的实际错误，现在根据 transformation 的内容写了 first version.
+
+#### Core Concepts
+
+- transform-friendly BrainX programs.
+- correctness before speed.
+- state/RNG safety.
+- shape stability.
+- warm runtime vs compile time.
+- multi-device scale.
+- Axis map: N = neurons / synapses / features / compartments; T = time / recurrent steps; B = batch / trials / stimuli / subjects; E = ensemble / parameter sweep / seeds; P = trainable parameters / sensitivities; D = devices.
+- BrainState transforms for stateful code.
+- JAX transforms only for pure functions.
+- jnp in transformed numerical paths.
+- np only for host preprocessing.
+- Explicit State, ParamState, RandomState.
+- Stable shapes and PyTrees.
+- Sparse/event representation preservation.
+
+#### General Scripts
+
+1. rewrite N scalar loops into array state.
+2. rewrite T Python loops into scan / for_loop / while_loop.
+3. rewrite B loops into vmap.
+4. rewrite E sweeps into mapped states / params / RNG.
+5. rewrite finite differences into grad.
+6. choose JIT boundary.
+7. compose jit, scan, vmap, grad.
+8. handle randomness under vmap.
+9. decide when multi-device is appropriate.
+10. validation gates.
+11. acceleration audit response format.
+
+#### Reference Routing
+
+- brainstate-control-flow patterns.
+- transformation-grad expansion.
+- transformation-jit expansion.
+- transformation-vmap expansion.
+- `brainstate-randomness-reproducibility` when acceleration touches random trials, stochastic modules, transformed RNG, dropout/noise, parameter sweeps with seeds, or reproducibility.
+
+#### Tiny RNG Block
+
+- In performance audits, verify RNG streams are mapped or split along the intended trial/sweep axis.
+- Do not claim acceleration is valid if stochastic outputs change because seed control or RandomState handling changed unintentionally.
+
+#### Common Failures
+
+- sprinkling jit everywhere.
+- compiling tiny helpers inside loops.
+- using raw JAX transform around BrainState state.
+- Python loops over time/batches/sweeps.
+- finite-difference gradients.
+- dynamic list history.
+- full-history memory blowup.
+- dynamic shapes.
+- hidden mutable attributes.
+- ambiguous state under vmap.
+- RNG reuse.
+- host sync in hot paths.
+- accidental densification of sparse/event connectivity.
+- claiming speedup from first-call compile time.
 
 ### brainstate-transformed diagnostics
 
@@ -837,7 +819,49 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
   - https://brainx.chaobrain.com/braincell/integration/solvers.html
   - https://brainx.chaobrain.com/braincell/integration/advanced.html
 
-### 4.6 Local Index and Policy related references
+### 4.6 Environment, Local Index, and Policy related references
+
+### brainx-install
+
+- Description: Environment and backend setup reference for BrainX installation, package import failures, version pinning, CPU/GPU/TPU backend choice, CUDA/JAX wheel mismatches, and `jax.devices()` validation. Primary route: `brainx-general-guard`.
+
+#### Scope
+
+- **Purpose:** Teach BrainX installation, backend selection, and validation as a reference, not as a normal modeling skill.
+- **Target size:** Within 100-150 lines.
+
+#### Core Concepts
+
+- BrainX meta-package.
+- Python and pip requirements.
+- CPU / GPU / TPU backend choice.
+- CUDA install path.
+- pinned BrainX release for reproducibility.
+
+#### General Scripts
+
+1. ask-before-install environment checklist.
+2. quick install: `pip install -U BrainX`.
+3. CPU install.
+4. CUDA 12/13 install.
+5. TPU install.
+6. exact release pinning.
+7. import validation.
+8. JAX device validation.
+
+#### Script References
+
+- `brainx-install-verify.py` (planned bundled script reference): executable validation check for BrainX import and `jax.devices()`. Source mirrored: [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html).
+- `brainx-install-commands.sh` (planned bundled script reference): official command list for full, CPU, CUDA 12, CUDA 13, TPU, pinned, and source installs. Source mirrored: [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html).
+
+#### Common Failures
+
+- installing before identifying backend.
+- unsupported Python version.
+- old pip / setuptools / wheel.
+- wrong CUDA/JAX wheel.
+- installing only raw JAX when BrainCell/BrainUnit is needed.
+- assuming GPU works without checking `jax.devices()`.
 
 ### common-failures index
 
@@ -978,13 +1002,13 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
 |---|---|---|---|---|
 | Single-cell current clamp | BrainCell singlecell, BrainUnit | ion/channel library | medium | yes |
 | Dendritic E/I integration | BrainCell multicompartment, BrainUnit | morphology, probe, filter | hard | yes |
-| SNN training | BrainState brain dynamics, training, transform | control-flow, grad | hard | yes |
-| CNN training | module, training, randomness | layer/activation library | medium | optional |
-| Acceleration rewrite | accelerate, transform | jit/vmap/control-flow | hard | yes |
+| SNN training | module-building, training, transformation-core | brainstate-dynamics, control-flow, grad | hard | yes |
+| CNN training | module-building, training | brainstate-randomness-reproducibility, layer/activation library | medium | optional |
+| Acceleration rewrite | transformation-core | brainx-acceleration-audit, jit/vmap/control-flow | hard | yes |
 
-### 6.5 Accelerate Skill 专项 Benchmark
+### 6.5 Acceleration Audit Reference 专项 Benchmark
 
-Accelerate skill 需要单独设置 benchmark，因为它的目标不是让 agent 重新写一个 BrainX 模型，而是让 agent 识别已有实现中的性能瓶颈，并把普通 BrainX 代码改写成 transformation-aware 的高性能实现。
+Acceleration audit reference 需要单独设置 benchmark，因为它的目标不是让 agent 重新写一个 BrainX 模型，而是让 agent 在 `brainstate-transformations-core` 路由后识别已有实现中的性能瓶颈，并把普通 BrainX 代码改写成 transformation-aware 的高性能实现。
 
 #### Baseline 设置
 
@@ -997,9 +1021,9 @@ Accelerate skill 需要单独设置 benchmark，因为它的目标不是让 agen
 - 是否用 generic NumPy / JAX 代替 BrainState transformation。
 - 是否缺少明确的 jit、vmap、scan / for_loop、grad 重写思路。
 
-#### New Skill 设置
+#### New Skill + Reference 设置
 
-让 agent 使用 accelerate + transformation skill bundle 浏览 workspace，并对同一个任务进行加速改写。
+让 agent 使用 `brainstate-transformations-core` 并按需打开 `brainx-acceleration-audit` reference 浏览 workspace，对同一个任务进行加速改写。
 
 观察重点：
 
@@ -1018,7 +1042,7 @@ Accelerate skill 需要单独设置 benchmark，因为它的目标不是让 agen
 
 #### 验收标准
 
-Accelerate skill 的验收标准不是“有没有提到加速”，而是看它是否真的让 agent 把一个普通 BrainX 实现改写成结构正确、transformation 使用合理、性能意识明确的 BrainX-native 高性能实现。
+Acceleration audit reference 的验收标准不是“有没有提到加速”，而是看它是否真的让 agent 把一个普通 BrainX 实现改写成结构正确、transformation 使用合理、性能意识明确的 BrainX-native 高性能实现。
 
 ## 7. 版本与发布策略
 
