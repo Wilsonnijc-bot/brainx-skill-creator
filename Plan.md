@@ -66,7 +66,8 @@ brainx-install/
 
 #### Script References
 
-- `brainx-install-verify.py`
+- `brainx-install-verify.py` (planned bundled script reference): executable validation check for BrainX import and `jax.devices()`. Source: [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html).
+- `brainx-install-commands.sh` (planned bundled script reference): official command list for full, CPU, CUDA 12, CUDA 13, TPU, pinned, and source installs. Source: [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html).
 
 #### Common Failures
 
@@ -166,6 +167,10 @@ brainx-install/
 4. track states inside a module.
 5. LIF neuron example.
 
+#### Script References
+
+- `skills/brainstate-state-management/references/scripts/lif_neuron_model.py` (local script): State-management LIF example showing `HiddenState`, `ShortTermState`, `ParamState`, and explicit `.value` reads/writes in one model. Source: [State Management](https://brainx.chaobrain.com/brainstate/tutorials/core/01_state_and_pytrees.html).
+
 #### Reference Routing
 
 - skill-transformation core.
@@ -215,11 +220,11 @@ brainx-install/
 - Size Inference with Pooling & Flatten.
 - Skill for Deeplearning Training.
 - Skill for randomness and reproducibility.
-- Modern CNN script from “activation function and normalization”: https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html
 
 #### Script References
 
-- “Training Spiking Neural Network script” → https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html
+- `skills/brainstate-module-building/references/scripts/modern_cnn.py` (local script): full module-composition reference using `Conv2d`, `BatchNorm2d`, `GELU`, `MaxPool2d`, `Linear`, `LayerNorm`, and `Dropout`. Source: [Activation Functions and Normalization](https://brainx.chaobrain.com/brainstate/tutorials/core/04_activations_and_normalization.html).
+- Building an SNN tutorial script (external tutorial-script reference): optional dynamics-network composition reference for `LIF` populations, projections, synapses, event communication, and composed E/I networks. Source: [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html).
 
 #### Common Failures
 
@@ -364,13 +369,14 @@ brainx-install/
 - skill randomness-reproduction.
 - prebuilt-activation library.
 - prebuilt-layer library.
-- Optimizer library.
+- braintools optimizer library.
 
 #### Script References
 
-- Image Classification with CNNs: Best normal supervised-training illustration: train/eval split, compiled train step, optimizer registration, loss, accuracy, validation loop. Source: https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html
-- Training Recurrent Neural Networks: Integrator Task: Best for temporal training: init_all_states, for_loop, sequence loss, L2 regularization, scheduler, recurrent state. Source: https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html
-- Training a Spiking Neural Network: Best for SNN-specific training: backpropagation through time, surrogate gradient, spk_fun=braintools.surrogate.ReluGrad(), for_loop, grad, optimizer update. Source: https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html
+- Image Classification with CNNs (external tutorial-script reference): normal supervised-training illustration for train/eval split, compiled train step, optimizer registration, loss, accuracy, and validation loop. Source: [Image Classification with CNNs](https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html).
+- `skills/brainstate-deeplearning-training/references/scripts/integrator_rnn.py` (local script): stateful sequence-training reference with synthetic temporal data, custom `RNNCell`, trainable initial state, `ParamState` collection, Adam optimizer, JIT prediction/training steps, gradient update, L2 regularization, epoch loop, and evaluation plot. Source: [Training Recurrent Neural Networks](https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html).
+- `training-snn.py` (planned bundled script reference): representative BrainState/BrainCell SNN training workflow; use when a task crosses from simulation into optimization. Source: [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
+
 
 ### 3.9 `brainstate-brain-dynamics`
 
@@ -417,8 +423,9 @@ brainx-install/
 
 #### Script References
 
-- Example of simulating HH-cell. Source: https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html
-- Training a Spiking Neural Network: Best for SNN-specific training: backpropagation through time, surrogate gradient, spk_fun=braintools.surrogate.ReluGrad(), for_loop, grad, optimizer update. Source: https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html
+- `hodgkin-huxley-neuron.py` (planned bundled script reference): complete executable HH neuron example for BrainState brain-dynamics workflows with biophysical state variables and continuous-time dynamics. Source: [Hodgkin-Huxley Neuron Model](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html).
+- `building-ei-snn.py` (planned bundled script reference): complete E/I spiking-network simulation workflow with `init_all_states` and compiled trajectory. Source: [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html).
+- `training-snn.py` (planned bundled script reference): representative BrainState/BrainCell SNN training workflow; use when the task crosses from simulation into optimization. Source: [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html).
 
 #### Common Failures
 
@@ -476,6 +483,16 @@ brainx-install/
 - parameter and regularization.
 - braincell-custom-ion-channel authoring.
 - braincell-manual-morphology construction.
+
+#### Script References
+
+- `skills/braincell-singlecell/references/scripts/hh_neuron_basics.py` (local script): default end-to-end HH point-neuron current-clamp script using `SingleCompartment`, Na/K/leak currents, `init_state`, `update(I)`, `for_loop`, and voltage/spike plotting. Source: [Your First Hodgkin Huxley Neuron](https://brainx.chaobrain.com/braincell/examples/hh_neuron_basics.html).
+- `skills/braincell-singlecell/references/scripts/fi_curve.py` (local script): current-sweep and FI-curve reference for vectorized independent point neurons, warm-up discard, spike counting, and firing-rate extraction. Source: [Frequency Current Curve](https://brainx.chaobrain.com/braincell/examples/fi_curve.html).
+- `skills/braincell-singlecell/references/scripts/channel_ablation.py` (local script): intact-vs-ablated point-neuron comparison reference, especially for setting channel conductance to zero while preserving the ion/channel structure. Source: [Channel Ablation](https://brainx.chaobrain.com/braincell/examples/channel_ablation.html).
+- `skills/braincell-singlecell/references/scripts/spike_frequency_adaptation.py` (local script): advanced single-cell reference for calcium-dependent spike-frequency adaptation, dynamic calcium, `MixIons(k, ca)`, and AHP/KCa mechanisms. Source: [Spike Frequency Adaptation](https://brainx.chaobrain.com/braincell/examples/spike_frequency_adaptation.html).
+- `skills/braincell-singlecell/references/scripts/t_current_rebound.py` (local script): advanced single-cell reference for post-inhibitory rebound, T-type calcium current, thalamic-style rebound bursting, and hyperpolarizing current protocols. Source: [T Current Rebound](https://brainx.chaobrain.com/braincell/examples/t_current_rebound.html).
+- `skills/braincell-singlecell/references/scripts/thalamic_neurons.py` (local script): advanced phenotype-comparison script for richer thalamic point-neuron variants, multiple channel compositions, calcium dynamics, HCN/AHP/T-type mechanisms, and phenotype comparison. Source: [Thalamic Neurons](https://brainx.chaobrain.com/braincell/examples/thalamic_neurons.html).
+- `skills/braincell-singlecell/references/scripts/calcium_channel_gating.py` (local script): channel-level diagnostic script for voltage-dependent gating curves, steady-state activation/inactivation, low-threshold vs high-threshold calcium channel comparison, and direct channel-method inspection. Source: [Calcium Channel Gating](https://brainx.chaobrain.com/braincell/examples/calcium_channel_gating.html).
 
 #### Common Failures
 
@@ -557,6 +574,10 @@ brainx-install/
 - solver library + effect of different integrations.
 - cv-policy reference.
 - filter function library.
+
+#### Script References
+
+- `skills/braincell-multicompartment/references/cell_multicompartment_reference.py` (local script): primary full-script reference for turning an SWC morphology into a simulation-ready multicompartment `Cell`; covers `Morphology.from_swc`, `Cell`, CVs, CV policies, `init_state`, `node_tree`, `paint`, `place`, `CurrentClamp`, `StateProbe`, and minimal `run` simulation. Source: [Cell in BrainCell](https://brainx.chaobrain.com/braincell/tutorials/cell.html).
 
 #### Common Failures
 
@@ -801,6 +822,12 @@ The reference layer below follows your uploaded Reference Markdown Plan. Source 
   - https://brainx.chaobrain.com/brainstate/apis/nn/pooling.html
   - https://brainx.chaobrain.com/brainstate/apis/nn/padding.html
   - https://brainx.chaobrain.com/brainstate/apis/nn/dropout.html
+
+### braintools optimizer library
+
+- Description: Catalogs optimizer tutorials, schedulers, Optax bridges, SciPy routines, and Nevergrad strategies for deeplearning training.
+- Mirror Source URLs:
+  - https://brainx.chaobrain.com/braintools/optim/index.html
 
 ### solver library with effects
 
