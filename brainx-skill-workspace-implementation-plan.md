@@ -80,16 +80,17 @@ skills/
 
 #### Essential Concepts
 
-- State as the sole mutation boundary.
-- reads and writes with `.value` 
+- State as the one place mutation happens.
+- reads and writes State with `.value`
 - `ParamState`, `HiddenState`, `ShortTermState`, `LongTermState`.
 - data structures: arrays or stable PyTrees.
-- `Module` composition and attribute registration.
-- `model.states(brainstate.ParamState)`.
+- A Module is an object that holds states and sub-modules as attributes.
+- A model is a tree: modules nesting modules, with State objects at the leaves
+- register parameters by assigning a State`model.states(brainstate.ParamState)`.
+- write ordinary code that reads and writes .value, then wrap it in a BrainState transform. Reaching for raw jax.jit on stateful code is the common first mistake, Use `brainstate.transform`, never raw JAX around stateful code
 - `nn.Param` versus `ParamState` versus `nn.Const`.
 - `init_all_states`
 - `brainstate.random.DEFAULT`, seeding
-- Use `brainstate.transform`, never raw JAX around stateful code.
 - tranform pattern: Whole-step JIT, gradient, and  batching.
 - `in_size`, `out_size`, `.desc()`, `Sequential`.
 
@@ -214,16 +215,39 @@ Location: `supervised-training-workflows.md`.
 #### Essential Concepts
 
 - `SingleCompartment` versus morphology-based `Cell`
-- `size` as independent batch/population dimension.
+ Declaration  (what to model)                            │
+   │    • Morphology        geometry: branches, radii, tree   │
+   │    • mech.*            channels, ions, clamps, synapses  │
+   │    • filter.*          regions & locsets (where)         │
+   └───────────────────────────┬─────────────────────────────┘
+                               │  paint / place
+   ┌───────────────────────────▼─────────────────────────────┐
+   │  Discretization  (_cv)                                   │
+   │    • CV               one isopotential control volume    │
+   │    • CVPolicy         how many CVs each branch gets      │
+   └───────────────────────────┬─────────────────────────────┘
+                               │  build
+   ┌───────────────────────────▼─────────────────────────────┐
+   │  Runtime  (_compute)                                     │
+   │    • PointTree        execution graph over CVs           │
+   │    • CellRuntimeState frozen, JAX-friendly state         │
+   └───────────────────────────┬─────────────────────────────┘
+                               │  step
+   ┌───────────────────────────▼─────────────────────────────┐
+   │  Integration  (quad)                                     │
+   │    • DiffEqModule     defines f(t, y)                    │
+   │    • solver           advances y by dt                   │
+   └───────────────────────────────────────────
+- In singlecell, Declaration is pure data. A braincell.mech Channel or Ion knows nothing about JAX, time, or state,
+- Integration advances the state in time using a solver from solverlibrary.md
+- `size` as independent batch/population dimension, solver names the integrator
 - Must use BrainUnit quantities.
-- keep `C`, `g_max`, and injected `I` all density-based by default
-- `V_th` as spike-event threshold
+- HHTypedNeuron is the abstract base class
 - Ion&channels, Match each channel's `root_type`
 - Choose Fixed ions when reversal potential is constant
 - When to use `MixIons` 
 - State initialization before simulation.
 - Solver choice.
-- Vectorized FI sweeps and conductance ablation.
 
 #### Canonical Workflow Scripts Included in the Skill
 
@@ -299,7 +323,15 @@ braincell/
 - `FixedPostNumConn` versus `FixedPreNumConn`.
 - Event-driven plasticity
 - Custom CPU/GPU operator boundary.
-- Decision table: how to choose between different data structures
+
+#### Connectivity Decision Table
+
+| Format | Use when | Avoid when |
+|---|---|---|
+| Dense JAX/NumPy array | The matrix is small or genuinely dense (roughly more than 25% nonzero), or you need arbitrary per-entry weights with the simplest possible code. | The matrix is large and sparse, because storing and computing zeros wastes memory and compute. |
+| CSR / CSC | You have an explicit, fixed sparse matrix and want fast row-oriented (CSR) or column-oriented (CSC) event-driven products. | Connectivity is generated randomly and the full matrix would not fit in memory. |
+| JITC (`JITCScalarR`, `JITCNormalR`, `JITCUniformR`, …) | Connectivity is random with a fixed probability and should be regenerated on demand from a seed instead of materialized. | You need to inspect, mutate, or learn individual weights. |
+| Fixed fan-in/out (`FixedPreNumConn`, `FixedPostNumConn`) | Each neuron has a fixed number of connections and you want that structure encoded directly. | Connection counts vary per neuron, or you need an explicit weight matrix. |
 
 #### Canonical Workflow Scripts Included in the Skill
 
@@ -309,7 +341,6 @@ braincell/
 4. Generated Random Connectivity: `JITCScalarR`
 5. Fixed Fan-Out Connectivity: `FixedPostNumConn`
 6. JAX Transform Pattern
-7. Synaptic Plasticity Overlay
 
 #### Reference Routing
 
@@ -355,7 +386,7 @@ brainevent/
 #### Essential Concepts
 
 - BrainMass ships models and delegates infrastructure.
-- Models are`*Step` and `list_models()` method.
+- Models are`*Step` and `list_models()` method for discovery.
 - `Simulator wraps steps.
 - Noise attached to the model.
 - Seed before reported stochastic runs.
@@ -370,16 +401,14 @@ brainevent/
 
 #### Canonical Workflow Scripts Included in the Skill
 
-1. Classify simulation, network, observation, fitting, or sweep.
-2. Discover and select the `*Step` model.
-3. Set units, `dt`, seed, noise, and trainable parameters.
-4. Construct `Simulator` or `Network`.
-5. Run and monitor.
-6. Apply an observation model if required.
-7. Fit or analyze.
-8. Validate shapes, units, transients, stochastic reproducibility, and objective suitability.
-
-Minimal inline scripts: one Hopf simulation and one differentiable amplitude-fitting workflow.
+1. Canonical Setup
+2. Model Discovery
+3. One Model Simulation
+4. Noise + Random Seed Basics
+5. Batching / Transform Basics
+6. Small Network
+7. Forward Models
+8. Fitting With Gradients
 
 #### Reference Routing
 
