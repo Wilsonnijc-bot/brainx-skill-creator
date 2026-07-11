@@ -96,13 +96,17 @@ skills/
 
 #### Canonical Workflow Scripts Included in the Skill
 
-1. Classify mutable, trainable, hidden, transient, and fixed values.
-2. Construct a small Module graph.
-3. Assign every State and child Module to attributes.
-4. Initialize State.
-5. Collect only `ParamState` for training.
-6. Apply `brainstate.transform.jit`, `grad`, or `vmap`.
-7. Validate output, final State, PyTree shape, and parameter coverage.
+1. Create State Values and PyTree State
+2. State Subclasses and Parameter Choice
+3. The Default `RandomState`
+4. Seed Management and Reproducibility
+5. Add State to a Module
+6. Basic Neural-Network Layers
+7. Size Inference, `Sequential`, and `.desc()`
+8. Minimal State-Aware JIT
+9. Minimal Gradient and Parameter Update
+10. Composed Training-Step Transform
+11. Minimal `vmap`
 
 #### Reference Routing
 
@@ -223,15 +227,11 @@ Location: `supervised-training-workflows.md`.
 
 #### Canonical Workflow Scripts Included in the Skill
 
-1. Classify point neuron versus morphology.
-2. Choose density or consistently area-scaled quantities.
-3. Select built-in ions/channels before custom authoring.
-4. Build and initialize the cell.
-5. Run current clamp through BrainState control flow.
-6. Record voltage/spikes or a diagnostic quantity.
-7. Validate units, shapes, baseline firing, and solver sensitivity.
-
-Minimal inline script: Na/K/leak HH current-clamp simulation.
+1. Minimal HH Cell
+2. Run A Current-Clamp Simulation
+3. Using Existing Ions And Channels
+4. Vectorized FI Curve Pattern
+5. Channel Ablation Pattern
 
 #### Reference Routing
 
@@ -303,15 +303,13 @@ braincell/
 
 #### Canonical Workflow Scripts Included in the Skill
 
-1. Confirm the signal is binary.
-2. Determine shape and orientation.
-3. Choose dense, CSR, JIT-generated, or fixed-degree storage.
-4. Construct connectivity.
-5. Execute `BinaryArray @ connectivity`.
-6. JIT the complete event communication call where useful.
-7. Validate output shape, reproducibility, and edge mutability requirements.
-
-Minimal inline script: explicit CSR construction and event-driven multiplication.
+1. `BinaryArray`
+2. Dense Connectivity
+3. Explicit Sparse Connectivity: `CSR`
+4. Generated Random Connectivity: `JITCScalarR`
+5. Fixed Fan-Out Connectivity: `FixedPostNumConn`
+6. JAX Transform Pattern
+7. Synaptic Plasticity Overlay
 
 #### Reference Routing
 
