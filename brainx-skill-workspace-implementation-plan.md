@@ -36,25 +36,29 @@ skills/
 
 #### Essential Concepts
 
-Creating Quantities
-Arithmetic with Units
-Unit Conversion
-Quantity Attributes
-Unit-Aware Math Functions
-Physical Constants
-JAX Transforms: jit, vmap, grad
-Unit Validation with Decorators
+- **Quantity creation** — scalar quantities, array quantities, and direct `u.Quantity(...)` construction.
+- **Arithmetic with units** — addition, multiplication, and division while preserving or composing units.
+- **Dimension compatibility** — addition requires matching dimensions; incompatible dimensions must raise an error.
+- **Unit conversion** — extract a numeric value in an explicit target unit with `to_decimal(target_unit)`.
+- **Quantity attributes** — inspect `mantissa`, `unit`, `dim`, `shape`, and `dtype` from one initialized quantity.
+- **Unit-aware math** — use `brainunit.math` functions when units must survive computation.
+- **Physical constants** — use BrainUnit-provided constants as unit-aware quantities.
+- **JAX transformations** — demonstrate quantity behavior under `jit`, `vmap`, and `grad`.
+- **Unit validation** — enforce function input contracts with `@u.check_units`.
 
 #### Canonical Workflow Scripts Included in the Skill
 
-1. Classify the physical variables and expected dimensions.
-2. Attach units at construction.
-3. Keep quantities through arithmetic and transforms.
-4. Convert only at an external API or formula boundary.
-5. Assert dimensions or use `check_units`.
-6. Confirm incorrect dimensions fail.
+1. Create quantities in three forms: scalars multiplied by units, arrays multiplied by units, and direct `u.Quantity(...)` construction.
+2. Demonstrate unit-aware addition, multiplication, and division.
+3. Show that addition requires dimension matching and that an incompatible operation raises an error.
+4. Convert a quantity to an explicit target unit with `to_decimal(target_unit)`.
+5. Initialize one representative quantity and inspect its `mantissa`, `unit`, `dim`, `shape`, and `dtype`.
+6. Apply representative `brainunit.math` functions while preserving or transforming units correctly.
+7. Use representative physical constants in a unit-aware calculation.
+8. Apply `jax.jit`, `jax.vmap`, and `jax.grad` to small quantity-aware functions.
+9. Define a function with `@u.check_units`, call it with valid units, and demonstrate rejection of invalid units.
 
-Minimal inline script: quantity construction, arithmetic, conversion, unit-aware reduction, JIT, and function contract.
+Minimal inline script: one progressive quantity-safety workflow covering construction → arithmetic → dimension checking → conversion → inspection → unit-aware math → constants → JAX transforms → unit contracts.
 
 #### Boundaries and Common Failures
 
