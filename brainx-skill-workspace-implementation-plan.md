@@ -215,29 +215,16 @@ Location: `supervised-training-workflows.md`.
 #### Essential Concepts
 
 - `SingleCompartment` versus morphology-based `Cell`
- Declaration  (what to model)                            │
-   │    • Morphology        geometry: branches, radii, tree   │
-   │    • mech.*            channels, ions, clamps, synapses  │
-   │    • filter.*          regions & locsets (where)         │
-   └───────────────────────────┬─────────────────────────────┘
-                               │  paint / place
-   ┌───────────────────────────▼─────────────────────────────┐
-   │  Discretization  (_cv)                                   │
-   │    • CV               one isopotential control volume    │
-   │    • CVPolicy         how many CVs each branch gets      │
-   └───────────────────────────┬─────────────────────────────┘
-                               │  build
-   ┌───────────────────────────▼─────────────────────────────┐
-   │  Runtime  (_compute)                                     │
-   │    • PointTree        execution graph over CVs           │
-   │    • CellRuntimeState frozen, JAX-friendly state         │
-   └───────────────────────────┬─────────────────────────────┘
-                               │  step
-   ┌───────────────────────────▼─────────────────────────────┐
-   │  Integration  (quad)                                     │
-   │    • DiffEqModule     defines f(t, y)                    │
-   │    • solver           advances y by dt                   │
-   └───────────────────────────────────────────
+
+#### Multicompartment Modeling Lifecycle
+
+| Stage | Namespace / layer | Components | Responsibility | Transition |
+|---|---|---|---|---|
+| Declaration | What to model | `Morphology`; `mech.*`; `filter.*` | Define branch geometry, radii, and tree structure; add channels, ions, clamps, and synapses; select regions and locsets. | `paint` / `place` |
+| Discretization | `_cv` | `CV`; `CVPolicy` | Represent one isopotential control volume and determine how many CVs each branch receives. | `build` |
+| Runtime | `_compute` | `PointTree`; `CellRuntimeState` | Build the execution graph over CVs and hold frozen, JAX-friendly runtime state. | `step` |
+| Integration | `quad` | `DiffEqModule`; solver | Define `f(t, y)` and advance the state by `dt`. | — |
+
 - In singlecell, Declaration is pure data. A braincell.mech Channel or Ion knows nothing about JAX, time, or state,
 - Integration advances the state in time using a solver from solverlibrary.md
 - `size` as independent batch/population dimension, solver names the integrator
