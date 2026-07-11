@@ -958,3 +958,7 @@ Create a skill-local `skills/brainx-install/references/` directory.
 | `skills/brainx-install/references/compatibility-and-release-matching.md` | Release tuples, exact/partial matching, release drift, historical/yanked releases, and compatibility evidence | [BrainX summary](https://brainx.chaobrain.com/summ/) plus the skill's compatibility-classification sections |
 
 No nested Markdown layer is declared.
+
+## Benchmark Design
+
+[BrainX Skill Benchmark Design](https://docs.google.com/document/d/1fIoGAZqnvciY8jDwxRjGxnV3DPmQIb2GA8CZG9uDpGc/edit?tab=t.0)
