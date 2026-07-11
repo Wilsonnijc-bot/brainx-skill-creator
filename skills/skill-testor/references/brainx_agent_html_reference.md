@@ -1,9 +1,15 @@
 # BrainX Agent HTML Reference
 Purpose: help an agent choose which BrainX documentation page to open next.
 Usage: match the user request to a section and description, then click the page link.
-Scope: BrainCell Concepts, BrainCell Modeling Tutorials, BrainCell Examples, BrainCell File Formats and IO, BrainState Getting Started, and BrainState Core Tutorials.
-Total HTML pages: 42.
+Scope: BrainX Ecosystem Getting Started, BrainUnit Getting Started, BrainCell Concepts, BrainCell Modeling Tutorials, BrainCell Examples, BrainCell File Formats and IO, BrainState Getting Started, BrainState Core Tutorials, BrainState Transformation Tutorials, BrainState Brain Dynamics Tutorials, BrainState Deep Learning Examples, and BrainState Brain Dynamics Examples.
+Total HTML pages: 63.
 Each teaching description is exactly ten words.
+
+## BrainX Ecosystem Getting Started
+- [Installing the Ecosystem](https://brainx.chaobrain.com/summ/install.html) — Covers requirements, BrainX package installation, accelerator extras, verification, and troubleshooting.
+
+## BrainUnit Getting Started
+- [Overview](https://brainx.chaobrain.com/brainunit/) — Introduces physical units, quantities, JAX integration, installation, and quickstart workflows.
 
 ## BrainCell Concepts
 - [Architecture](https://brainx.chaobrain.com/braincell/concepts/architecture.html) — Explains declaration layers, discretization, runtime graphs, and JAX execution flow.
@@ -59,3 +65,30 @@ Each teaching description is exactly ten words.
 - [Transformations Essentials](https://brainx.chaobrain.com/brainstate/tutorials/core/06_transformations_essentials.html) — Teaches state aware transforms for JIT, gradients, mapping, control flow.
 - [Training and Metrics](https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html) — Shows training loops, optimizers, losses, metrics, and evaluation patterns workflows.
 - [Random Number Generation](https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html) — Explains reproducible random keys, streams, seeding, and stochastic modules behavior.
+
+## BrainState Transformation Tutorials
+- [JIT and Compilation](https://brainx.chaobrain.com/brainstate/tutorials/transformations/01_jit_and_compilation.html) — Teaches stateful JIT compilation and BrainState versus JAX API choices.
+- [Automatic Differentiation](https://brainx.chaobrain.com/brainstate/tutorials/transformations/02_autodiff.html) — Explains gradients over arguments, states, Jacobians, Hessians, and training loops.
+- [Vectorization](https://brainx.chaobrain.com/brainstate/tutorials/transformations/03_vectorization.html) — Teaches vmap mapping axes, batched states, and vectorized module execution.
+- [Advanced Batching and Parallelism](https://brainx.chaobrain.com/brainstate/tutorials/transformations/04_advanced_batching.html) — Covers nested batching, pmap, sharding, parallel mapping, and device execution.
+- [Control Flow](https://brainx.chaobrain.com/brainstate/tutorials/transformations/05_control_flow.html) — Explains compiled conditionals, loops, scans, checkpointed scans, and state updates.
+- [Error Handling and Runtime Checks](https://brainx.chaobrain.com/brainstate/tutorials/transformations/06_error_handling_and_checks.html) — Shows runtime checks, assertions, NaN debugging, and transformed error handling.
+- [Debugging Transformed Code](https://brainx.chaobrain.com/brainstate/tutorials/transformations/07_debugging.html) — Teaches debugging transformed code with breakpoints, callbacks, and inspection tools.
+- [IR Optimization and Code Generation](https://brainx.chaobrain.com/brainstate/tutorials/transformations/08_ir_optimization_and_codegen.html) — Introduces IR optimization concepts, lowering, code generation, and compilation inspection.
+
+## BrainState Brain Dynamics Tutorials
+- [Dynamics and Integration](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/01_dynamics_and_integration.html) — Defines Dynamics modules, integration loops, update hooks, sizes, and delays.
+- [Delay Protocol](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/02_synaptic_delays.html) — Explains delay buffers, registration, interpolation, access patterns, and synaptic timing.
+- [Event-Driven Operators](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html) — Introduces event-driven operators for sparse spiking communication and efficient updates.
+- [Building a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html) — Builds spiking neural networks with populations, synapses, monitors, and simulation.
+- [Training a Spiking Neural Network](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html) — Trains spiking networks using surrogate gradients, losses, optimizers, and metrics.
+
+## BrainState Deep Learning Examples
+- [Image Classification with CNNs](https://brainx.chaobrain.com/brainstate/examples/deep_learning/image_classification.html) — Builds CNN image classifiers with datasets, training loops, evaluation, visualizations.
+- [Variational Autoencoder on MNIST](https://brainx.chaobrain.com/brainstate/examples/deep_learning/variational_autoencoder.html) — Builds MNIST variational autoencoders with encoders, decoders, losses, latent visualizations.
+- [Training Recurrent Neural Networks](https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html) — Trains recurrent networks on integrator tasks using sequences and metrics.
+
+## BrainState Brain Dynamics Examples
+- [Hodgkin-Huxley Neuron Model](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html) — Implements Hodgkin Huxley neurons with channels, currents, integration, and plotting.
+- [Simulating Spiking Neural Networks](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_simulation.html) — Simulates spiking networks with LIF populations, connections, monitors, and dynamics.
+- [Training Spiking Neural Networks](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/snn_training.html) — Trains spiking networks with surrogate gradients, classification data, and evaluation.

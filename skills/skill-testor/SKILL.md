@@ -1,15 +1,15 @@
 ---
-name: brainx-skill-creator
-description: Create, test, and improve BrainX package skills. Use when building or revising skills that teach agents BrainCell, BrainState, BrainUnit, BrainMass, or related BrainX APIs for simulations, modeling, debugging, tutorials, evals, or avoidance of generic NumPy/JAX substitutes.
+name: skill-testor
+description: Test and benchmark existing BrainX package skills or skill bundles. Use when evaluating whether skills correctly guide agents to use BrainCell, BrainState, BrainUnit, BrainMass, or related BrainX APIs for simulations, modeling, debugging, tutorials, evals, and avoidance of generic NumPy/JAX substitutes. Do not use for creating, writing, or revising skills.
 ---
 
-# BrainX Skill Creator
+# Skill Testor
 
-A BrainX-focused fork of Anthropic's skill creator for creating and improving skills that make agents use BrainX packages correctly.
+A BrainX-focused skill evaluator for testing whether BrainX skills make agents use BrainX packages correctly.
 
-## BrainX Skill Development Objective
+## BrainX Skill Testing Objective
 
-The purpose of this skill creator is to create, test, and improve BrainX skills.
+The purpose of this skill is to test and benchmark existing BrainX skills or skill bundles.
 
 A BrainX skill is successful only if it helps the agent use BrainX packages correctly, cleanly, and intelligently. The agent should learn to solve BrainX modeling and simulation tasks through BrainX APIs, concepts, examples, and documentation.
 
@@ -19,14 +19,13 @@ When a user asks for a BrainX simulation, model, tutorial, debugging help, or co
 
 At a high level, use this loop:
 
-- Draft or revise the BrainX skill or skill bundle.
 - Use an existing user-prepared `evals/evals.json` when present.
 - Create a small `evals/evals.json` template only when no eval file exists.
 - Run each eval with the BrainX skill bundle and against a baseline.
 - Grade outputs with objective BrainX expectations.
 - Aggregate benchmark results and open the eval viewer.
-- Read user feedback, consult BrainX documentation for technical corrections, and improve the skill.
-- Repeat until the skill reliably guides agents toward BrainX-native work.
+- Read user feedback and report findings.
+- Stop after reporting results. Do not write, revise, or optimize the tested skill unless the user switches to a separate skill-writing workflow.
 
 ## Running and Evaluating Test Cases
 
@@ -131,7 +130,7 @@ Use this per-eval metadata shape:
 
 For a new BrainX skill or skill bundle, the baseline run receives the same user prompt but no BrainX skill instructions. The BrainX packages may still be installed in the environment. The baseline should test what the agent does without these custom BrainX skills, not whether the environment has BrainX installed.
 
-For improving an existing BrainX skill or skill bundle, snapshot the old skill or old bundle before editing. The baseline should use the old version and save outputs under `old_skill_bundle/outputs/`.
+When comparing against a previous existing BrainX skill or skill bundle, use the old version as the baseline and save outputs under `old_skill_bundle/outputs/`.
 
 The purpose of the baseline is to test whether the BrainX skill improves BrainX API correctness, documentation use, runnable simulation quality, and avoidance of generic NumPy/JAX substitutes.
 
@@ -264,7 +263,7 @@ When the user tells you review is complete, read `feedback.json`:
 }
 ```
 
-Empty feedback means the user thought that run was fine. Focus improvements on specific complaints and failed expectations. Kill the viewer server when finished:
+Empty feedback means the user thought that run was fine. Summarize specific complaints and failed expectations. Kill the viewer server when finished:
 
 ```bash
 kill $VIEWER_PID 2>/dev/null
@@ -272,61 +271,43 @@ kill $VIEWER_PID 2>/dev/null
 
 ## BrainX Truthbase Discipline
 
-When adding or revising BrainX technical knowledge, first consult:
+When grading BrainX technical correctness or strengthening eval expectations, first consult:
 
 `references/brainx_agent_html_reference.md`
 
-Use this reference to choose the relevant BrainX documentation page before writing new technical instructions.
+Use this reference to choose the relevant BrainX documentation page before grading or explaining technical claims.
 
-Do not overclick. Open only the documentation page directly relevant to the concept being added, corrected, or tested. Click deeper only when the selected page is insufficient for the specific knowledge being written.
+Do not overclick. Open only the documentation page directly relevant to the concept being tested. Click deeper only when the selected page is insufficient to verify the specific technical claim.
 
 Use the truthbase when:
 
-- adding new BrainX API instructions;
-- correcting a technical claim;
-- writing examples involving BrainCell, BrainState, BrainUnit, BrainMass, morphology, channels, ions, mechanisms, integration, state, modules, transforms, training, or simulations;
+- checking BrainX API instructions;
+- verifying a technical claim;
+- grading examples involving BrainCell, BrainState, BrainUnit, BrainMass, morphology, channels, ions, mechanisms, integration, state, modules, transforms, training, or simulations;
 - resolving uncertainty from eval transcripts;
-- improving a skill after a failed expectation.
+- explaining why an expectation failed.
 
 Do not use the truthbase just to decorate the skill with links. Its purpose is to prevent hallucinated BrainX knowledge and keep skills grounded in the current documentation.
 
-## Improving the Skill
+## Reporting Findings
 
-After reviewing outputs, feedback, transcripts, and benchmark data, revise the BrainX skill or skill bundle.
+After reviewing outputs, feedback, transcripts, and benchmark data, report findings about the tested BrainX skill or skill bundle.
 
-### How to think about improvements
+Generalize from failures. If the agent used generic code, hallucinated an API, misunderstood a concept, or skipped the relevant BrainX package, identify the missing BrainX concept or API pattern and cite the failed expectation or transcript evidence.
 
-Generalize from failures. If the agent used generic code, hallucinated an API, misunderstood a concept, or skipped the relevant BrainX package, do not patch only that single prompt. Identify the missing reusable BrainX concept and make the skill better for future tasks.
+Do not patch the skill from this workflow. If the user wants changes after testing, treat that as a separate skill-writing task and use the appropriate skill-creation workflow.
 
-Keep the skill lean. Remove instructions that do not improve BrainX correctness, documentation use, or eval outcomes. If repeated work appears across eval runs, consider bundling a small helper script or adding a focused reference.
-
-### BrainX-specific improvement rule
-
-When a test fails because the agent used generic code, hallucinated a BrainX API, misunderstood a BrainX concept, or skipped the relevant BrainX package, do not patch the skill narrowly for only that test case.
-
-Instead:
+When a test fails because the agent used generic code, hallucinated a BrainX API, misunderstood a BrainX concept, or skipped the relevant BrainX package:
 
 1. read the failed transcript and output;
 2. identify the missing BrainX concept or API pattern;
 3. open `references/brainx_agent_html_reference.md`;
 4. choose the relevant BrainX documentation page;
 5. verify the correct concept, API, or example from the documentation;
-6. update the skill with a general reusable instruction;
-7. add or update an expectation that would catch the same failure in future evals.
+6. report the issue and the evidence;
+7. recommend the expectation that would catch the same failure in future evals.
 
-The goal is not to make one eval pass. The goal is to make the agent more fluent in BrainX.
-
-### The iteration loop
-
-After improving the skill:
-
-1. Apply the improvements.
-2. Rerun evals into a new `iteration-<N+1>/` directory, including baseline runs.
-3. Launch the reviewer with `--previous-workspace` pointing at the previous iteration.
-4. Wait for the user to review and tell you they are done.
-5. Read feedback, improve again, and repeat.
-
-Keep going until the user is satisfied, feedback is empty, or changes stop making meaningful progress.
+The goal is not to make one eval pass. The goal is to measure whether the tested skill makes the agent more fluent in BrainX.
 
 ## BrainX Eval Types
 
@@ -353,88 +334,6 @@ Use a mix of these eval types:
 7. Bundle coordination evals  
    Test whether multiple BrainX skills work together cleanly, such as BrainState state management plus BrainState module building.
 
-## Description Optimization
-
-The description field in `SKILL.md` frontmatter is the primary mechanism that determines whether the BrainX skill creator triggers. After creating or improving the skill, offer to optimize the description for realistic BrainX skill-development tasks.
-
-### Step 1: Generate trigger eval queries
-
-Create 20 eval queries as JSON, mixing should-trigger and should-not-trigger cases:
-
-```json
-[
-  {
-    "query": "help me build a BrainState Module skill",
-    "should_trigger": true
-  },
-  {
-    "query": "write a generic NumPy tutorial about arrays",
-    "should_trigger": false
-  }
-]
-```
-
-Should-trigger examples include:
-
-- "help me build a BrainState Module skill"
-- "make an eval for BrainCell HH simulation"
-- "create a skill that teaches agents BrainCell mechanisms"
-- "improve this BrainX skill because it keeps writing NumPy instead of BrainCell"
-- "test whether this skill uses region/locset correctly"
-
-Should-not-trigger near-misses include:
-
-- generic NumPy tutorials;
-- non-BrainX JAX examples;
-- generic neuroscience explanations without BrainX implementation;
-- unrelated skill creation tasks.
-
-Make the queries realistic and specific, with file paths, package names, user context, and mistakes an actual BrainX skill author might make. Avoid obvious negative cases that do not test triggering quality.
-
-### Step 2: Review with user
-
-Present the eval set with `assets/eval_review.html`:
-
-1. Read the template from `assets/eval_review.html`.
-2. Replace `__EVAL_DATA_PLACEHOLDER__` with the JSON array.
-3. Replace `__SKILL_NAME_PLACEHOLDER__` with the skill name.
-4. Replace `__SKILL_DESCRIPTION_PLACEHOLDER__` with the current description.
-5. Write a temp HTML file and open it for user review.
-6. Use the exported eval set from the user's Downloads folder.
-
-### Step 3: Run the optimization loop
-
-Run:
-
-```bash
-python -m scripts.run_loop \
-  --eval-set <path-to-trigger-eval.json> \
-  --skill-path <path-to-skill> \
-  --model <model-id-powering-this-session> \
-  --max-iterations 5 \
-  --verbose
-```
-
-Tail the output periodically. The loop evaluates the current description, proposes improved descriptions, re-evaluates train and held-out test splits, and returns a `best_description`.
-
-### How skill triggering works
-
-Skills appear with their name and description. The model decides whether to consult a skill from that metadata. Complex BrainX skill-development tasks should trigger this skill; generic programming, generic neuroscience, or non-BrainX examples should not.
-
-### Step 4: Apply the result
-
-Take `best_description` from the JSON output and update the skill's `SKILL.md` frontmatter. Show the user the before/after and report scores.
-
-## Package and Present
-
-If a file presentation tool is available, package the skill:
-
-```bash
-python -m scripts.package_skill <path/to/skill-folder>
-```
-
-Give the user the resulting `.skill` file path.
-
 ## Reference Files
 
 The `agents/` directory contains specialized instructions:
@@ -449,11 +348,11 @@ The `references/` directory contains:
 
 Core loop:
 
-- Create or revise the BrainX skill or bundle.
-- Use or create `evals/evals.json`.
+- Test an existing BrainX skill or bundle.
+- Use an existing `evals/evals.json`, or create a small starter template only when none exists.
 - Run with-skill-bundle and baseline evals.
 - Grade with BrainX expectations.
 - Aggregate benchmark results and launch `eval-viewer/generate_review.py`.
 - Read user feedback and failed transcripts.
-- Consult the BrainX truthbase before changing technical instructions.
-- Improve, rerun, and package when ready.
+- Consult the BrainX truthbase when grading or explaining technical failures.
+- Report findings without writing or revising the tested skill.

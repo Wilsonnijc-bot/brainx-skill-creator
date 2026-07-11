@@ -1,6 +1,6 @@
-# BrainX Skill Creator JSON Schemas
+# Skill Testor JSON Schemas
 
-This document defines the JSON shapes used by `brainx-skill-creator`.
+This document defines the JSON shapes used by `skill-testor`.
 
 ## evals/evals.json
 

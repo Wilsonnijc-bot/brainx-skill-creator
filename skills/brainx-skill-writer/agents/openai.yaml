@@ -1,0 +1,4 @@
+interface:
+  display_name: "BrainX Skill Writer"
+  short_description: "Write dense BrainX skills from official sources"
+  default_prompt: "Use $brainx-skill-writer to turn this BrainX concept and official HTML into a dense BrainX skill."
