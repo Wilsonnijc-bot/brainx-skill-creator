@@ -276,6 +276,7 @@ Location: `supervised-training-workflows.md`.
 
 ```text
 braincell/
+├── skills/brainevent/SKILL.md [shared skill]
 ├── area-scaled-hh-pattern.md
 ├── mixions-for-adaptation.md [shared]
 ├── ion-library.md
@@ -507,6 +508,7 @@ Minimal inline scripts: single-neuron rollout and two-population synapse/project
 
 ```text
 brainpy/
+├── skills/brainevent/SKILL.md [shared skill]
 ├── brainpy-neuron-library.md
 ├── brainpy-synapse-library.md
 ├── brainpy-synaptic-outputs.md
