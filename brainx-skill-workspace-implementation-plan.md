@@ -88,8 +88,7 @@ skills/
 - A model is a tree: modules nesting modules, with State objects at the leaves
 - register parameters by assigning a State`model.states(brainstate.ParamState)`.
 - write ordinary code that reads and writes .value, then wrap it in a BrainState transform. Reaching for raw jax.jit on stateful code is the common first mistake, Use `brainstate.transform`, never raw JAX around stateful code
-- `nn.Param` versus `ParamState` versus `nn.Const`.
-- `init_all_states`
+- `nn.Param` versus `ParamState`, use `nn.Param` for constraints .
 - `brainstate.random.DEFAULT`, seeding
 - tranform pattern: Whole-step JIT, gradient, and  batching.
 - `in_size`, `out_size`, `.desc()`, `Sequential`.
@@ -99,11 +98,11 @@ skills/
 
 1. Create State Values and PyTree State
 2. State Subclasses and Parameter Choice
-3. The Default `RandomState`
+3. The Default `RandomState` illustration
 4. Seed Management and Reproducibility
 5. Add State to a Module
-6. Basic Neural-Network Layers
-7. Size Inference, `Sequential`, and `.desc()`
+6. Using Basic Pre-built Neural-Network Layers
+7. One ComplexNet scripts illustrate Size Inference, `Sequential`, and `.desc()`
 8. Minimal State-Aware JIT
 9. Minimal Gradient and Parameter Update
 10. Composed Training-Step Transform
@@ -254,7 +253,7 @@ Location: `supervised-training-workflows.md`.
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-- In singlecell, Declaration is pure data. A braincell.mech Channel or Ion knows nothing about JAX, time, or state,
+- Declaration is pure data. A braincell.mech Channel or Ion knows nothing about JAX, time, or state,
 - Integration advances the state in time using a solver from solverlibrary.md
 - `size` as independent batch/population dimension, solver names the integrator
 - Must use BrainUnit quantities.
@@ -332,15 +331,15 @@ braincell/
 - Advanced branches: sparse formats, connectivity variants, plasticity, custom operators.
 
 #### Essential Concepts
-
+- BrainEvent provides data structures and algorithms for event-driven computation on CPUs, GPUs, and TPUs. By processing only the active (non-zero) spikes in a network, it models brain dynamics far more efficiently than dense matrix operations — while integrating seamlessly with JAX’s autodiff, JIT, and vmap
+- The brain computes with spikes — sparse, binary events. brainevent exploits that sparsity: wrap a spike vector in BinaryArray, and any matrix multiplication against it skips the zeros and processes only the neurons that fired.
 - `BinaryArray` and `spikes @ connectivity`.
 - `coo2csr()`.
 - `JITCScalarR` and seed stability.
 - `FixedPostNumConn` versus `FixedPreNumConn`.
 - Event-driven plasticity
 - Custom CPU/GPU operator boundary.
-
-#### Connectivity Decision Table
+#### Connectivity Decision Table we will include
 
 | Format | Use when | Avoid when |
 |---|---|---|
@@ -400,19 +399,17 @@ brainevent/
 - Advanced branches: model catalog, noise, coupling/delays, observations, fitting backends, datasets, analysis, task training, sweeps.
 
 #### Essential Concepts
-
+- brainmass backpropagates through the ODE solve, brings gradient-based fitting, high-dimensional parameter fields, GPU/TPU batching, and train neural-mass-style networks on tasks — all unit-safe and end-to-end from parameters to BOLD / EEG / MEG signals.
+- Architecture: a model describes one region’s dynamics, a Simulator runs it, a Network couples many regions, and a Fitter tunes parameters to data. Units thread through all of them. Each section below is a few runnable lines.
 - BrainMass ships models and delegates infrastructure.
 - Models are`*Step` and `list_models()` method for discovery.
-- `Simulator wraps steps.
+- `Simulator` wraps steps into one `run` call .
 - Noise attached to the model.
 - Seed before reported stochastic runs.
-- `batch_size` ensemble axis.
-- `Network`, connectivity, distance, speed, delays.
-- Global `dt` before delay-buffer construction.
-- Forward/observation.
-- `HRFBold` canonical differentiable path.
-- Concept in fitting: itter`, trainable `Param`, objective, and `FitResult`.
+- `Network` turns a single *Step node (sized for N regions) into a coupled whole-brain model, you give it connectivity, distance, speed, delays.
+- Fitter tunes a model’s trainable parameters to data behind one `.fit()`call
 - When to look at gradient-free fitting.
+- Forward model is the biophysical map from that hidden activity to a measurable neuroimaging signal
 - Units throughout the pipeline.
 
 #### Canonical Workflow Scripts Included in the Skill
