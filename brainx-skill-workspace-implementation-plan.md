@@ -483,6 +483,7 @@ brainmass/
 
 #### Essential Concepts
 
+- brain simulation and brain-inspired computing are the same computation, expressed once. The neurons, synapses, and projections you assemble to simulate a biophysical network are the exact objects you train with gradients and scale with linear-memory online learning.
 - BrainPy models as BrainState `Dynamics` Modules.
 - State initialization and BrainUnit quantities.
 - Neuron and synapse anatomy.
