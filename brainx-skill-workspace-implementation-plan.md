@@ -35,16 +35,20 @@ skills/
 
 
 #### Essential Concepts
-
+- brainunit provides physical units and unit-aware mathematical system in JAX for general AI-driven scientific computing.
+- Deep integration with JAX, providing comprehensive support for modern AI framework features including automatic differentiation (autograd), just-in-time compilation (JIT), vectorization, and parallel computation
+- Strict physical unit type checking and dimensional inference system, detecting unit inconsistencies during compilation
+- Dimension matching, Units are tracked automatically. Incompatible operations raise errors.
 - Creating quantities
 - Arithmetic with units
-- Dimension matching
 - Unit conversion
 - Quantity attributes
 - `brainunit.math` functions
 - Physical constants
 - JAX transformations: `jit`, `vmap`, `grad`
 - Unit validation with `@check_units`
+- BrainUnit represents all units using seven irreducible SI dimensions—length, mass, time, electric current, temperature, amount of substance, and luminous intensity—and derives other units by combining their dimension exponents.
+- brainunit generates standard names for units, combining the unit name (e.g. “siemens”) with a prefixes (e.g. “m”), and also generates squared and cubed versions by appending a number. For example, the units “msiemens”, “siemens2”, “usiemens3” are all predefined. look up the prefix in the prefix-library
 
 #### Canonical Workflow Scripts Included in the Skill
 
@@ -57,6 +61,17 @@ skills/
 7. Physical constants.
 8. JAX transformation examples.
 9. Unit validation with `@check_units`.
+
+#### reference
+
+brainunit/
+├── quantity_inspection_and_conversion.md
+├── array_mechanics.md
+├── math_function_library.md
+├── unit_structure_and_definition.md
+├── temperature_conversions.md
+├── prefix_library.md
+├──physical_constants_library.md
 
 #### Boundaries and Common Failures
 
@@ -80,19 +95,43 @@ skills/
 
 #### Essential Concepts
 
-- State as the one place mutation happens.
-- reads and writes State with `.value`
-- `ParamState`, `HiddenState`, `ShortTermState`, `LongTermState`.
-- data structures: arrays or stable PyTrees.
-- A Module is an object that holds states and sub-modules as attributes.
-- A model is a tree: modules nesting modules, with State objects at the leaves
-- register parameters by assigning a State`model.states(brainstate.ParamState)`.
-- write ordinary code that reads and writes .value, then wrap it in a BrainState transform. Reaching for raw jax.jit on stateful code is the common first mistake, Use `brainstate.transform`, never raw JAX around stateful code
-- `nn.Param` versus `ParamState`, use `nn.Param` for constraints .
-- `brainstate.random.DEFAULT`, seeding
-- tranform pattern: Whole-step JIT, gradient, and  batching.
-- `in_size`, `out_size`, `.desc()`, `Sequential`.
+##### 1. States
 
+- `State` is BrainState's mutation boundary. It encapsulates model values that change over time.
+- A `State` can wrap Python scalars, arrays, `jax.Array` values, dictionaries, lists, or any stable PyTree structure. Its value remains mutable after compilation.
+- Read and write State through `.value`.
+- Core State features:
+  1. **Mutable after compilation** — State values can be updated inside JIT-compiled functions.
+  2. **Type and shape safety** — State enforces consistent types and shapes.
+  3. **JAX integration** — State works with state-aware JAX transformations.
+- Choose the appropriate subclass: `ParamState`, `HiddenState`, `ShortTermState`, or `LongTermState`.
+- Distinguish `nn.Param` from `ParamState`; use `nn.Param` when parameter constraints are required.
+
+##### 2. Modules
+
+- `brainstate.nn.Module` is the base class for BrainState modules. A Module holds State and child Modules as attributes.
+- A model forms a tree of nested Modules with State objects at the leaves.
+- Assign State and child Modules to attributes for automatic registration, then collect trainable parameters with `model.states(brainstate.ParamState)`.
+- Core Module features:
+  1. **Automatic state management** — State and child Modules are registered and collected automatically.
+  2. **Clean abstractions** — related State and computation stay encapsulated.
+  3. **Reusability** — Modules can be constructed once and reused.
+  4. **Composability** — simple Modules combine into larger model graphs.
+- Modules also support State inspection, pretty printing, and integration with BrainState transformations.
+
+##### 3. Size Inference and Composition
+
+- Every `brainstate.nn.Module` has `in_size` and `out_size` properties describing data shape without the batch dimension.
+- When `in_size` is known, the Module can infer `out_size` automatically.
+- In `Sequential` composition, one layer's output size becomes the next layer's input size.
+- Use `.desc()` to create a layer descriptor that is instantiated when its input size becomes available.
+
+##### 4. State-Aware Transformations and Randomness
+
+- Write ordinary code that reads and writes `.value`, then wrap the complete operation in `brainstate.transform`; do not apply raw `jax.jit`, `jax.grad`, or `jax.vmap` to stateful code.
+- `brainstate.transform` mirrors the JAX transformation API with state-aware `jit`, `grad`, and `vmap` that track the State objects a model reads and writes.
+- Use `brainstate.random.DEFAULT` and explicit seeding for reproducible stochastic workflows.
+- Prefer whole-step JIT, gradient, and batching transformations over fragmented transforms.
 
 #### Canonical Workflow Scripts Included in the Skill
 
@@ -214,6 +253,17 @@ Location: `supervised-training-workflows.md`.
 #### Essential Concepts
 
 - `SingleCompartment` versus morphology-based `Cell`
+- braincell.SingleCompartment collapses the morphology and discretization layers — there is exactly one compartment — and exposes ions and channels added imperatively in __init__.
+
+```text
+Direct model declaration
+    ↓
+Dynamical state and differential equations
+    ↓
+braincell.quad integration
+    ↓
+Updated states and spike detection
+```
 
 #### Multicompartment Modeling Lifecycle
 
@@ -255,7 +305,7 @@ Location: `supervised-training-workflows.md`.
 
 - Declaration is pure data. A braincell.mech Channel or Ion knows nothing about JAX, time, or state,
 - Integration advances the state in time using a solver from solverlibrary.md
-- `size` as independent batch/population dimension, solver names the integrator
+- `size` as independent batch/population dimension inside the super().__init__(size, solver=solver). solver names the integrator
 - Must use BrainUnit quantities.
 - HHTypedNeuron is the abstract base class
 - Ion&channels, Match each channel's `root_type`
@@ -333,12 +383,13 @@ braincell/
 
 #### Essential Concepts
 - BrainEvent provides data structures and algorithms for event-driven computation on CPUs, GPUs, and TPUs. By processing only the active (non-zero) spikes in a network, it models brain dynamics far more efficiently than dense matrix operations — while integrating seamlessly with JAX’s autodiff, JIT, and vmap
-- The brain computes with spikes — sparse, binary events. brainevent exploits that sparsity: wrap a spike vector in BinaryArray, and any matrix multiplication against it skips the zeros and processes only the neurons that fired.
+- The brain computes with spikes — sparse, binary events. Wrap a spike vector in BinaryArray, and any matrix multiplication against it skips the zeros and processes only the neurons that fired.
+#### dense arrays and any of brainevent’s sparse connectivity structures that A BinaryArray multiplies against
 - `BinaryArray` and `spikes @ connectivity`.
 - `coo2csr()`.
 - `JITCScalarR` and seed stability.
 - `FixedPostNumConn` versus `FixedPreNumConn`.
-- Event-driven plasticity
+- Event-driven plasticity see synaptic-plasticity-modeling.md
 - Custom CPU/GPU operator boundary.
 #### Connectivity Decision Table we will include
 
@@ -363,8 +414,9 @@ braincell/
 ```text
 brainevent/
 ├── sparse-formats.md
-├── connectivity-variants.md
-├── synaptic-plasticity.md
+├── JIT-connectivity-variants.md
+├── Fixed-Connection-extension.md
+├── synaptic-plasticity-modeling.md
 ├── custom-operators.md
 └── scripts/
     ├── 102_EI_net_1996.py
@@ -780,7 +832,17 @@ brainx-install/
 - Broad eager dependency upgrade used.
 - Malformed frontmatter prevents reliable skill discovery.
 
+## BrainUnit
 
+| Reference | Scope | Sources |
+|---|---|---|
+| `skills/brainunit/references/quantity-inspection-and-conversion.md` | Inspect quantity mantissas, units, dimensions, compatibility, and convert or extract values in compatible units | [Unit Conversion](https://brainunit.readthedocs.io/physical_units/conversion.html), with selected inspection and conversion methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html) |
+| `skills/brainunit/references/array-mechanics.md` | Create unit-aware arrays; inspect array identity and metadata; index, update, reshape, transpose, repeat, and convert array backends; perform high-level named-axis transformations | [Array Creation](https://brainunit.readthedocs.io/unit_operations/array_creation.html), array constructors from the [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), array properties and methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html), and axis rearrangement and repetition from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
+| `skills/brainunit/references/math-function-library.md` | Choose mathematical functions by unit semantics: dimensionless-input, unit-preserving, unit-changing, reduction, contraction, comparison, boolean, and index-returning operations | [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), excluding array creation and structural array manipulation covered by `array-mechanics.md`, with reduction and contraction semantics from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
+| `skills/brainunit/references/unit-structure-and-definition.md` | Inspect unit structure, compare dimensions and scales, combine units, and define named, derived, or scaled custom units | [Unit API](https://brainunit.readthedocs.io/apis/generated/brainunit.Unit.html), with canonical unit-composition and custom-definition workflows from [Combining and Defining Unit](https://brainunit.readthedocs.io/advanced_tutorials/combining_and_defining.html) |
+| `skills/brainunit/references/temperature-conversions.md` | Handle affine temperature conversion, Kelvin quantities, plain Celsius values, absolute temperatures, and temperature differences | [Temperature Conversions](https://brainunit.readthedocs.io/physical_units/temperature.html) |
+| `skills/brainunit/references/physical-constant-library.md` | Find and use predefined unit-aware physical constants, including their names, values, dimensions, and canonical units | [Physical Constants](https://brainx.chaobrain.com/brainunit/physical_units/constants.html) |
+| `skills/brainunit/references/prefix-library.md` | Find predefined SI base and derived units, understand BrainUnit unit naming, and apply supported prefix symbols and scales | [Standard Units](https://brainx.chaobrain.com/brainunit/physical_units/standard_units.html), with generated prefixed|
 
 
 ## BrainCell: `skills/braincell/SKILL.md`
@@ -944,7 +1006,6 @@ No skill or index route may select advanced randomness directly. The randomness 
 
 - `skills/brainstate/references/deeplearning-training/supervised-training-workflows.md` is the training parent. It conditionally reuses the already-owned grad, JIT, parameter, randomness, control-flow, optimizer, layer, and script references; those are not loaded automatically.
 - `skills/brainstate/references/diagnostics/brainstate-transformed-diagnostics.md` establishes transformed diagnostics before selecting its second-level common-failures router.
-
 
 
 ## BrainTrace: `skills/braintrace/SKILL.md`
