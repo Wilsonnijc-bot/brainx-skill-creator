@@ -62,16 +62,28 @@ skills/
 8. JAX transformation examples.
 9. Unit validation with `@check_units`.
 
-#### reference
+#### Reference Routing
 
+```text
 brainunit/
-├── quantity_inspection_and_conversion.md
-├── array_mechanics.md
-├── math_function_library.md
-├── unit_structure_and_definition.md
-├── temperature_conversions.md
-├── prefix_library.md
-├──physical_constants_library.md
+├── quantity-inspection-and-conversion.md
+├── array-mechanics.md
+├── math-function-library.md
+├── unit-structure-and-definition.md
+├── temperature-conversions.md
+├── prefix-library.md
+└── physical-constant-library.md
+```
+
+| Reference | Scope | Sources |
+|---|---|---|
+| `skills/brainunit/references/quantity-inspection-and-conversion.md` | Inspect quantity mantissas, units, dimensions, compatibility, and convert or extract values in compatible units | [Unit Conversion](https://brainunit.readthedocs.io/physical_units/conversion.html), with selected inspection and conversion methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html) |
+| `skills/brainunit/references/array-mechanics.md` | Create unit-aware arrays; inspect array identity and metadata; index, update, reshape, transpose, repeat, and convert array backends; perform high-level named-axis transformations | [Array Creation](https://brainunit.readthedocs.io/unit_operations/array_creation.html), array constructors from the [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), array properties and methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html), and axis rearrangement and repetition from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
+| `skills/brainunit/references/math-function-library.md` | Choose mathematical functions by unit semantics: dimensionless-input, unit-preserving, unit-changing, reduction, contraction, comparison, boolean, and index-returning operations | [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), excluding array creation and structural array manipulation covered by `array-mechanics.md`, with reduction and contraction semantics from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
+| `skills/brainunit/references/unit-structure-and-definition.md` | Inspect unit structure, compare dimensions and scales, combine units, and define named, derived, or scaled custom units | [Unit API](https://brainunit.readthedocs.io/apis/generated/brainunit.Unit.html), with canonical unit-composition and custom-definition workflows from [Combining and Defining Unit](https://brainunit.readthedocs.io/advanced_tutorials/combining_and_defining.html) |
+| `skills/brainunit/references/temperature-conversions.md` | Handle affine temperature conversion, Kelvin quantities, plain Celsius values, absolute temperatures, and temperature differences | [Temperature Conversions](https://brainunit.readthedocs.io/physical_units/temperature.html) |
+| `skills/brainunit/references/physical-constant-library.md` | Find and use predefined unit-aware physical constants, including their names, values, dimensions, and canonical units | [Physical Constants](https://brainx.chaobrain.com/brainunit/physical_units/constants.html) |
+| `skills/brainunit/references/prefix-library.md` | Find predefined SI base and derived units, understand BrainUnit unit naming, and apply supported prefix symbols and scales | [Standard Units](https://brainx.chaobrain.com/brainunit/physical_units/standard_units.html), including generated prefixed unit names |
 
 #### Boundaries and Common Failures
 
@@ -831,19 +843,6 @@ brainx-install/
 - Lockfiles or manifests modified without approval.
 - Broad eager dependency upgrade used.
 - Malformed frontmatter prevents reliable skill discovery.
-
-## BrainUnit
-
-| Reference | Scope | Sources |
-|---|---|---|
-| `skills/brainunit/references/quantity-inspection-and-conversion.md` | Inspect quantity mantissas, units, dimensions, compatibility, and convert or extract values in compatible units | [Unit Conversion](https://brainunit.readthedocs.io/physical_units/conversion.html), with selected inspection and conversion methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html) |
-| `skills/brainunit/references/array-mechanics.md` | Create unit-aware arrays; inspect array identity and metadata; index, update, reshape, transpose, repeat, and convert array backends; perform high-level named-axis transformations | [Array Creation](https://brainunit.readthedocs.io/unit_operations/array_creation.html), array constructors from the [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), array properties and methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html), and axis rearrangement and repetition from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
-| `skills/brainunit/references/math-function-library.md` | Choose mathematical functions by unit semantics: dimensionless-input, unit-preserving, unit-changing, reduction, contraction, comparison, boolean, and index-returning operations | [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), excluding array creation and structural array manipulation covered by `array-mechanics.md`, with reduction and contraction semantics from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
-| `skills/brainunit/references/unit-structure-and-definition.md` | Inspect unit structure, compare dimensions and scales, combine units, and define named, derived, or scaled custom units | [Unit API](https://brainunit.readthedocs.io/apis/generated/brainunit.Unit.html), with canonical unit-composition and custom-definition workflows from [Combining and Defining Unit](https://brainunit.readthedocs.io/advanced_tutorials/combining_and_defining.html) |
-| `skills/brainunit/references/temperature-conversions.md` | Handle affine temperature conversion, Kelvin quantities, plain Celsius values, absolute temperatures, and temperature differences | [Temperature Conversions](https://brainunit.readthedocs.io/physical_units/temperature.html) |
-| `skills/brainunit/references/physical-constant-library.md` | Find and use predefined unit-aware physical constants, including their names, values, dimensions, and canonical units | [Physical Constants](https://brainx.chaobrain.com/brainunit/physical_units/constants.html) |
-| `skills/brainunit/references/prefix-library.md` | Find predefined SI base and derived units, understand BrainUnit unit naming, and apply supported prefix symbols and scales | [Standard Units](https://brainx.chaobrain.com/brainunit/physical_units/standard_units.html), with generated prefixed|
-
 
 ## BrainCell: `skills/braincell/SKILL.md`
 
