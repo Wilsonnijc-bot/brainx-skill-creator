@@ -1,5 +1,22 @@
 # BrainX Skill Workspace Implementation Plan
 
+### Why BrainX skill?
+
+BrainX is an differentiable, extensible, high performance and JAX-integrated infrastructure for brain simulation. It is designed around the practical workflow of modern computational neuroscience researchers, who are, at the same time, target users of BrainX.
+
+With the rise of AI coding agents such as Codex and Claude in 2026, agents are becoming increasingly embedded in researchers’ daily programming workflows. Researchers now expect an agent to use appropriate APIs, construct experiments, debug simulations, optimise performance, and modify code without changing its scientific meaning.
+
+Generic coding agents, however, do not automatically understand the BrainX API cleanly, so it sometimes might produce messy, low performance code, then the user of brainX can't utilize the power of coding agent and BrainX at the same time easily.
+
+### Mission
+The skill is filling the gap: letting the codex understand the BrainX system, so that BrainX user utilize both powerful tools without effort or prior expertise.
+
+The design of BrainX skill, mirror the guideline of Anthropic and other scientific computing package skills(e.g Nvidia scikit), follows the pattern of progressive disclosure: compact core skill defines the core concepts and standard workflows, while package-specific, variations of APIs, libraries knowledge lives in separate Markdown references.
+
+This ensures two advantage: first, it avoids the agent from opening useless context, allowing the codex to perserve the original reasoning and generalized ability while integrating with BrainX. Second, extensibility, just like BrainX ecosystem itself, that future APIs built on the current core can be added directly as new Markdown files without rewriting the whole skill.
+
+
+
 ## 1. Primary Skill List
 
 ```text
@@ -67,6 +84,7 @@ skills/
 ```text
 brainunit/
 ├── quantity-inspection-and-conversion.md
+├── array-creation.md
 ├── array-mechanics.md
 ├── math-function-library.md
 ├── unit-structure-and-definition.md
@@ -77,8 +95,9 @@ brainunit/
 
 | Reference | Scope | Sources |
 |---|---|---|
+| `skills/brainunit/references/array-creation.md` | Create unit-aware arrays from scalars, sequences, ranges, shapes, grids, and existing arrays; generate filled, identity, diagonal, triangular, and template-shaped arrays with explicit units and dtypes | [Array Creation](https://brainunit.readthedocs.io/unit_operations/array_creation.html), with array constructors from the [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html) |
+| `skills/brainunit/references/array-mechanics.md` | Inspect array identity and metadata; index, slice, functionally update, reshape, flatten, squeeze, transpose, broadcast, concatenate, split, stack, repeat, and convert array backends; perform high-level named-axis transformations | Array properties, methods, functional updates, and backend conversion from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html), structural array operations from the [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), and axis rearrangement and repetition from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
 | `skills/brainunit/references/quantity-inspection-and-conversion.md` | Inspect quantity mantissas, units, dimensions, compatibility, and convert or extract values in compatible units | [Unit Conversion](https://brainunit.readthedocs.io/physical_units/conversion.html), with selected inspection and conversion methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html) |
-| `skills/brainunit/references/array-mechanics.md` | Create unit-aware arrays; inspect array identity and metadata; index, update, reshape, transpose, repeat, and convert array backends; perform high-level named-axis transformations | [Array Creation](https://brainunit.readthedocs.io/unit_operations/array_creation.html), array constructors from the [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), array properties and methods from the [Quantity API](https://brainunit.readthedocs.io/apis/generated/brainunit.Quantity.html), and axis rearrangement and repetition from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
 | `skills/brainunit/references/math-function-library.md` | Choose mathematical functions by unit semantics: dimensionless-input, unit-preserving, unit-changing, reduction, contraction, comparison, boolean, and index-returning operations | [brainunit.math API](https://brainunit.readthedocs.io/apis/brainunit.math.html), excluding array creation and structural array manipulation covered by `array-mechanics.md`, with reduction and contraction semantics from [Einstein Operations](https://brainunit.readthedocs.io/unit_operations/einstein_operations.html) |
 | `skills/brainunit/references/unit-structure-and-definition.md` | Inspect unit structure, compare dimensions and scales, combine units, and define named, derived, or scaled custom units | [Unit API](https://brainunit.readthedocs.io/apis/generated/brainunit.Unit.html), with canonical unit-composition and custom-definition workflows from [Combining and Defining Unit](https://brainunit.readthedocs.io/advanced_tutorials/combining_and_defining.html) |
 | `skills/brainunit/references/temperature-conversions.md` | Handle affine temperature conversion, Kelvin quantities, plain Celsius values, absolute temperatures, and temperature differences | [Temperature Conversions](https://brainunit.readthedocs.io/physical_units/temperature.html) |
@@ -172,13 +191,6 @@ brainstate/
 ├── prebuilt-activation-library.md
 ├── size-inference-with-convolution.md
 ├── size-inference-with-pooling-flatten.md
-├── supervised-training-workflows.md
-│   ├── transformation-grad-expansion.md [shared]
-│   ├── transformation-jit-expansion.md [shared]
-│   ├── parameter-constraints-regularization.md [shared]
-│   ├── randomness-and-reproducibility.md [shared]
-│   ├── brainstate-control-flow-patterns.md [shared]
-│   └── braintools-optimizer-reference.md [shared]
 ├── parameter-constraints-regularization.md
 │   └── parameter-containers-transforms-catalog.md
 ├── transformation-jit-expansion.md [shared]
@@ -188,12 +200,7 @@ brainstate/
 ├── brainstate-randomness-reproducibility/
 │   └── randomness-and-reproducibility.md
 │       └── advanced-randomness.md
-├── brainstate-dynamics/
-│   └── dynamics-and-integration.md
-│       ├── brain-dynamics-delay-protocol.md
-│       ├── brain-dynamics-event-driven-operators.md
-│       └── brain-dynamics-snn-workflows.md
-├── diagnostics/
+├── diagnostics
 │   └── brainstate-transformed-diagnostics.md
 │       └── common-failures-index.md
 └── braintools-optimizer-reference.md
@@ -226,16 +233,6 @@ Location: `dynamics-and-integration.md`.
 Source: [Building an SNN](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html)  
 Role: Network dynamics and event-driven integration.  
 Location: `dynamics-and-integration.md` → `brain-dynamics-snn-workflows.md`.
-
-`skills/brainstate/references/brainstate-dynamics/scripts/training-snn.py`  
-Source: [Training an SNN](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html)  
-Role: Surrogate-gradient SNN training.  
-Location: Dynamics SNN child and supervised-training parent.
-
-`skills/brainstate/references/deeplearning-training/references/scripts/integrator_rnn.py`  
-Source: [Integrator RNN](https://brainx.chaobrain.com/brainstate/examples/deep_learning/integrator_rnn.html)  
-Role: Complete supervised recurrent-training workflow.  
-Location: `supervised-training-workflows.md`.
 
 #### Boundaries and Common Failures
 
@@ -322,8 +319,12 @@ Updated states and spike detection
 - HHTypedNeuron is the abstract base class
 - Ion&channels, Match each channel's `root_type`
 - Choose Fixed ions when reversal potential is constant
+#### Simulation techniques
+- must look at brainpy skill when dealing with network of cells
+- must use brainstate.environ.context() to define the simulation environment
+- must use brainstate.transform.for_loop(step, times) for timestamped steps
+- Brainunit math functions that help with array: u.math.arange u.math.squeeze(), recommend to use
 - When to use `MixIons` 
-- State initialization before simulation.
 - Solver choice.
 
 #### Canonical Workflow Scripts Included in the Skill
@@ -344,6 +345,7 @@ braincell/
 ├── ion-library.md
 ├── channel-library.md
 ├── solver-library-with-effects.md
+├── array-creation.md
 └── multicompartment-cell-workflow.md
     ├── braincell-custom-ion-channel-authoring.md
     ├── braincell-manual-morphology-construction.md
@@ -548,14 +550,19 @@ brainmass/
 #### Essential Concepts
 
 - brain simulation and brain-inspired computing are the same computation, expressed once. The neurons, synapses, and projections you assemble to simulate a biophysical network are the exact objects you train with gradients and scale with linear-memory online learning.
-- BrainPy models as BrainState `Dynamics` Modules.
+- Look at the brainstate skill for knowledge in Modules.
 - State initialization and BrainUnit quantities.
 - Neuron and synapse anatomy.
 - Projection roles: `comm`, `syn`, `out`, `post`.
 - AlignPre versus AlignPost.
 - Projection-before-post update order.
+#### Simulation techniques
+- must use brainstate.environ.context() to define the simulation environment
+- must use brainstate.transform.for_loop(step, times) for timestamped steps, `for_loop`/`scan` rollout and checkpointing.
+- Brainunit math functions that help with array: u.math.arange u.math.squeeze(), recommend to use
+
+### Training
 - Surrogate gradients and `ParamState` selection.
-- `for_loop`/`scan` rollout and checkpointing.
 
 #### Canonical Workflow Scripts Included in the Skill
 
@@ -578,6 +585,9 @@ brainpy/
 ├── brainpy-synapse-library.md
 ├── brainpy-synaptic-outputs.md
 ├── brainpy-projection-library.md
+├── brain-dynamics-delay-protocol.md
+├── brain-event-driven-operators.md
+├── array-creation.md
 ├── brainpy-plasticity.md
 ├── brainpy-custom-models.md
 ├── brainpy-training.md
@@ -608,8 +618,6 @@ brainpy/
 Native scripts:
 
 - `103_COBA_2005.py` — [source](https://github.com/chaobrain/brainpy.state/blob/main/examples/brainpy_like/103_COBA_2005.py) — canonical E/I COBA network; projection branch.
-- `104_CUBA_2005_version2.py` — [source](https://github.com/chaobrain/brainpy.state/blob/main/examples/brainpy_like/104_CUBA_2005_version2.py) — explicit E/I pathways; projection branch.
-- `brunel.py` — [source](https://github.com/chaobrain/brainpy.state/blob/main/examples/brainpy_like/brunel.py) — Builder/Network alternative; advanced script branch.
 - `106_COBA_HH_2007.py` — [source](https://github.com/chaobrain/brainpy.state/blob/main/examples/brainpy_like/106_COBA_HH_2007.py) — custom HH network; custom-model branch.
 - `107_gamma_oscillation_1996.py` — [source](https://github.com/chaobrain/brainpy.state/blob/main/examples/brainpy_like/107_gamma_oscillation_1996.py) — custom neuron/synapse; custom-model branch.
 - `109_fast_global_oscillation.py` — [source](https://github.com/chaobrain/brainpy.state/blob/main/examples/brainpy_like/109_fast_global_oscillation.py) — `DeltaProj` and delay; projection branch.
@@ -929,6 +937,8 @@ The skill defines ten package references and owns its own optimizer-reference co
 | `skills/brainpy/references/brainpy-readouts-and-inputs.md` | Readout heads, spike/input generators, Poisson helpers, and encoders | [Readout API](https://brainx.chaobrain.com/brainpy-state/apis/brainpy-readouts.html), [readout how-to](https://brainx.chaobrain.com/brainpy-state/brainpy-style/howto/train-readouts.html), [input API](https://brainx.chaobrain.com/brainpy-state/apis/brainpy-inputs.html) |
 | `skills/brainpy/references/braintools.md` | Initializers, surrogate functions, metrics, encoders, and visualization helpers | [Braintools index](https://brainx.chaobrain.com/braintools/) |
 | `skills/brainpy/references/braintools-optimizer-reference.md` | Optimizer families, schedulers, and external wrappers | [Braintools optimization](https://brainx.chaobrain.com/braintools/optim/index.html) |
+| `skills/brainstate/references/brainstate-dynamics/brain-dynamics-delay-protocol.md` | Delay APIs and buffer behavior | [delay tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/02_synaptic_delays.html) |
+| `skills/brainstate/references/brainstate-dynamics/brain-dynamics-event-driven-operators.md` | Sparse event operators and connectivity | [event-driven tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html) |
 
 ### NEST-compatible nested branch
 
@@ -986,15 +996,6 @@ No skill or index route may select advanced randomness directly. The randomness 
 |---|---|---|
 | `skills/brainstate/references/brainstate-randomness-reproducibility/advanced-randomness.md` | Advanced streams, mapped randomness, key restoration, and checkpoint behavior | Same randomness corpus as the parent |
 
-### Nested dynamics
-
-`skills/brainstate/SKILL.md` names only `skills/brainstate/references/brainstate-dynamics/dynamics-and-integration.md`. That parent is the only first-hop selector for these children; siblings may cross-route only after the parent establishes the dynamics task.
-
-| Nested child | Need | Crafting source |
-|---|---|---|
-| `skills/brainstate/references/brainstate-dynamics/brain-dynamics-delay-protocol.md` | Delay APIs and buffer behavior | [delay tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/02_synaptic_delays.html) |
-| `skills/brainstate/references/brainstate-dynamics/brain-dynamics-event-driven-operators.md` | Sparse event operators and connectivity | [event-driven tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html) |
-| `skills/brainstate/references/brainstate-dynamics/brain-dynamics-snn-workflows.md` | Build, simulate, and train SNNs | [build an SNN](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html), [train an SNN](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/05_training_an_snn.html) |
 
 ### Other parent-selected routes
 
