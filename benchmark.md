@@ -35,6 +35,30 @@ Neuron
 
 This is a deliberately hybrid benchmark cell. It must not be presented as a calibrated biological neuron or a classical Hodgkin–Huxley model.
 
+## Prompt to the agent
+
+```text
+Build a runnable BrainCell script for one configurable hybrid neuron. Subclass
+braincell.SingleCompartment and explicitly set length=10 um, radius=5 um,
+C=1 uF/cm^2, a deterministic -65 mV initializer, V_th=0 mV, and
+solver="ind_exp_euler".
+
+Use this exact hierarchy:
+- SodiumFixed(E=100 mV) containing Na_HH1952(g_max=120 mS/cm^2)
+- PotassiumFixed(E=-100 mV) containing Kv1p1_MA2025_BC(g_max=4 mS/cm^2)
+- CdpCAM_MA2024_PC(solver="backward_euler", one substep) containing
+  Cav1p2_MA2025_BC(g_max=0.2 mS/cm^2)
+- HCN1_RI2021_SC(g_max=0.1 mS/cm^2, E=-34.4 mV) directly on the neuron
+- IL(g_max=0.1 mS/cm^2, E=-70 mV) directly on the neuron
+
+Simulate one neuron for 100 ms at dt=0.01 ms with 0 uA/cm^2 for 0–20 ms,
+10 uA/cm^2 for 20–80 ms, then 0 uA/cm^2 for 80–100 ms. Run the loop with
+brainstate.transform.for_loop, record voltage and spikes, plot the voltage,
+and print the spike count. Keep every physical value as a BrainUnit quantity.
+Treat this only as an API-composition benchmark, not a calibrated cell type or
+a classical Hodgkin–Huxley model.
+```
+
 ## Configuration
 
 | Category          | Parameter                |                 Value |
@@ -98,51 +122,6 @@ Neuron
 ```
 
 `CdpCAM_MA2024_PC` is an ion-dynamics model, not a channel. It contains calcium concentration, pump, buffer, Calbindin, Parvalbumin, and Calmodulin dynamics. `Cav1p2_MA2025_BC` is the calcium channel placed inside it.
-
-## Prompt to the agent
-
-```text
-Using only the current BrainX APIs, implement one configurable
-single-compartment conductance-based neuron.
-
-Requirements:
-
-1. Subclass braincell.SingleCompartment.
-2. Explicitly configure:
-   - length = 10 um
-   - radius = 5 um
-   - C = 1 uF/cm^2
-   - V_initializer = constant -65 mV
-   - V_th = 0 mV
-   - solver = ind_exp_euler
-
-3. Add the following ion/channel structure:
-   - SodiumFixed with E = +100 mV
-     - Na_HH1952 with g_max = 120 mS/cm^2
-   - PotassiumFixed with E = -100 mV
-     - Kv1p1_MA2025_BC with g_max = 4 mS/cm^2
-   - CdpCAM_MA2024_PC with backward_euler and one substep
-     - Cav1p2_MA2025_BC with g_max = 0.2 mS/cm^2
-   - HCN1_RI2021_SC directly on the neuron, with
-     g_max = 0.1 mS/cm^2 and E = -34.4 mV
-   - IL directly on the neuron, with
-     g_max = 0.1 mS/cm^2 and E = -70 mV
-
-4. Do not place HCN1_RI2021_SC or IL inside an ion container.
-5. Do not omit the sodium channel.
-6. Run one neuron for 100 ms with dt = 0.01 ms.
-7. Inject:
-   - 0 uA/cm^2 from 0 to 20 ms
-   - 10 uA/cm^2 from 20 to 80 ms
-   - 0 uA/cm^2 from 80 to 100 ms
-8. Use brainstate.transform.for_loop.
-9. Record membrane voltage and spike events.
-10. Plot the voltage trace and print the spike count.
-
-Keep every dimensional parameter as a BrainUnit quantity.
-Do not claim that the hybrid cell represents a specific biological
-cell type.
-```
 
 ## Acceptance criteria
 

@@ -2,7 +2,7 @@
 
 ### Why BrainX skill?
 
-BrainX is an differentiable, extensible, high performance and JAX-integrated infrastructure for brain simulation. It is designed around the practical workflow of modern computational neuroscience researchers, who are, at the same time, target users of BrainX.
+BrainX is an differentiable, extensible, high performance and JAX-integrated infrastructure for brain simulation, and is designed around the practical workflow of modern computational neuroscience researchers. at the same time, the researchers are the target users of BrainX.
 
 With the rise of AI coding agents such as Codex and Claude in 2026, agents are becoming increasingly embedded in researchers’ daily programming workflows. Researchers now expect an agent to use appropriate APIs, construct experiments, debug simulations, optimise performance, and modify code without changing its scientific meaning.
 
@@ -189,8 +189,7 @@ brainstate/
 ├── model-interop-and-migration.md
 ├── prebuilt-layer-library.md
 ├── prebuilt-activation-library.md
-├── size-inference-with-convolution.md
-├── size-inference-with-pooling-flatten.md
+├── size-inference-with-convolution-pooling-flatten.md
 ├── parameter-constraints-regularization.md
 │   └── parameter-containers-transforms-catalog.md
 ├── transformation-jit-expansion.md [shared]
@@ -215,15 +214,11 @@ brainstate/
 | `skills/brainstate/references/state_collections_and_utilities.md` | Filter, organize, freeze, flatten, configure, and print nested collections | [Utility Toolkit](https://brainx.chaobrain.com/brainstate/how_to/filter_and_organize_states.html) |
 | `skills/brainstate/references/collective_model_operations.md` | Initialize, reset, invoke methods, batch lifecycle operations, and restore model-wide State | [Collective Operations](https://brainx.chaobrain.com/brainstate/how_to/collective_operations.html) |
 | `skills/brainstate/references/extension_mechanisms.md` | Mixins, descriptors, runtime modes, and State hooks | [Mixin System](https://brainx.chaobrain.com/brainstate/how_to/custom_states_and_mixins.html), [State Hooks](https://brainx.chaobrain.com/brainstate/how_to/state_hooks.html) |
-| `skills/brainstate/references/deeplearning-training/supervised-training-workflows.md` | Complete supervised training, losses, metrics, evaluation, clipping, randomness, optimizer registration, and epochs | [Training and Metrics](https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html), with [Randomness](https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html) for stochastic modules |
-| `skills/brainstate/references/size-inference-with-convolution.md` | Detailed convolution size formulas and edge cases | [Common layers tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/03_common_layers.html) |
-| `skills/brainstate/references/size-inference-with-pooling-flatten.md` | Pooling reduction and flatten-size formulas | [Common layers tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/03_common_layers.html) |
-| `skills/brainstate/references/braintools-optimizer-reference.md` | Optimizer, scheduler, and external-wrapper selection | [Braintools optimization](https://brainx.chaobrain.com/braintools/optim/index.html) |
+| `skills/brainstate/references/size-inference-with-convolution-pooling-flatten.md` | Convolution size formulas and edge cases, pooling reduction, and flatten-size inference | [Common layers tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/03_common_layers.html) |
 | `skills/brainstate/references/brainstate/parameter-constraints-regularization.md` | `ParamState` versus `nn.Param`, constraints/transforms, `nn.Const`, classical/structural penalties, prior regularizers, and loss integration | [Parameters tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/05_parameters_transforms_regularization.html), [constraint/regularization how-to](https://brainx.chaobrain.com/brainstate/how_to/constrain_and_regularize_parameters.html), [regularization API](https://brainx.chaobrain.com/brainstate/apis/nn/regularization.html) |
 | `skills/brainstate/references/brainstate-randomness-reproducibility/randomness-and-reproducibility.md` | Randomness parent: streams, stochastic transforms, trials, dropout/noise, and checkpointed RNG State | [Randomness tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html), [random API](https://brainx.chaobrain.com/brainstate/apis/random.html) |
 | `skills/brainstate/references/libraries/prebuilt-layer-library.md` | Full layer catalog | [Linear API](https://brainx.chaobrain.com/brainstate/apis/nn/linear.html), [convolution API](https://brainx.chaobrain.com/brainstate/apis/nn/conv.html), [normalization API](https://brainx.chaobrain.com/brainstate/apis/nn/normalization.html), [pooling API](https://brainx.chaobrain.com/brainstate/apis/nn/pooling.html), [padding API](https://brainx.chaobrain.com/brainstate/apis/nn/padding.html), [dropout API](https://brainx.chaobrain.com/brainstate/apis/nn/dropout.html) |
 | `skills/brainstate/references/libraries/prebuilt-activation-library.md` | Activation functions and normalization selection | [Activation API](https://brainx.chaobrain.com/brainstate/apis/nn/activation.html) |
-| `skills/brainstate/references/brainstate-dynamics/dynamics-and-integration.md` | Dynamics parent: time evolution, LIF/SNN populations, delays, hooks, event communication, and trajectories | [Dynamics and Integration](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/01_dynamics_and_integration.html) |
 | `skills/brainstate/references/brainstate/transformation-jit-expansion.md` | State write-back, cache/static args, compilation boundaries, and benchmarking | [JIT and Compilation](https://brainx.chaobrain.com/brainstate/tutorials/transformations/01_jit_and_compilation.html), [Transformation Essentials](https://brainx.chaobrain.com/brainstate/tutorials/core/06_transformations_essentials.html) |
 | `skills/brainstate/references/brainstate/transformation-grad-expansion.md` | Autodiff, differentiable simulation, fitting, `return_value`, and `has_aux` | [Autodiff](https://brainx.chaobrain.com/brainstate/tutorials/transformations/02_autodiff.html), [Training and Metrics](https://brainx.chaobrain.com/brainstate/tutorials/core/07_training_and_metrics.html), [Parameters tutorial](https://brainx.chaobrain.com/brainstate/tutorials/core/05_parameters_transforms_regularization.html) |
 | `skills/brainstate/references/brainstate/transformation-vmap-expansion.md` | State axes, ensembles, sweeps, stochastic vmap, `in_states`, and `out_states` | [Vectorization](https://brainx.chaobrain.com/brainstate/tutorials/transformations/03_vectorization.html), [Randomness](https://brainx.chaobrain.com/brainstate/tutorials/core/08_randomness.html) |
@@ -253,8 +248,6 @@ No skill or index route may select advanced randomness directly. The randomness 
 |---|---|---|---|
 | `skills/brainstate/references/libraries/solver-library-with-effects.md` | Dynamics parent | Numerical integration choice within a dynamics task; not one of the three owned dynamics children | BrainCell integration concept, API, solver guide, advanced integration, and integration-methods example |
 | `skills/brainstate/references/diagnostics/common-failures-index.md` | Transformed-diagnostics parent | Second-level recurring-failure routing | Existing diagnostic routing content |
-
-- `skills/brainstate/references/deeplearning-training/supervised-training-workflows.md` is the training parent. It conditionally reuses the already-owned grad, JIT, parameter, randomness, control-flow, optimizer, layer, and script references; those are not loaded automatically.
 - `skills/brainstate/references/diagnostics/brainstate-transformed-diagnostics.md` establishes transformed diagnostics before selecting its second-level common-failures router.
 
 #### Script References
@@ -274,15 +267,7 @@ Source: Not recorded in the current file; source must be established before trea
 Role: Residual Modules and dynamic child registration.  
 Location: Direct skill reference.
 
-`skills/brainstate/references/brainstate-dynamics/scripts/hodgkin-huxley-neuron.py`  
-Source: [Hodgkin–Huxley example](https://brainx.chaobrain.com/brainstate/examples/brain_dynamics/hodgkin_huxley_neuron.html)  
-Role: Advanced dynamics workflow.  
-Location: `dynamics-and-integration.md`.
 
-`skills/brainstate/references/brainstate-dynamics/scripts/building-ei-snn.py`  
-Source: [Building an SNN](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/04_building_an_snn.html)  
-Role: Network dynamics and event-driven integration.  
-Location: `dynamics-and-integration.md` → `brain-dynamics-snn-workflows.md`.
 
 #### Boundaries and Common Failures
 
@@ -582,16 +567,20 @@ brainmass/
 ├── noiseprocesses.md
 ├── coupling-network-api.md
 ├── forward-observation-api.md
-├── orchestration-fitting-objectives-api.md
+├── fitting-with-objectives-api.md
+│   ├── braintools-metrics.md
+│   ├── braintools-optimizer.md
+│   └── braintools-surrogate-gradient.md
 ├── datasets-api.md
 ├── visualization-analysis-api.md
 ├── batch-transform-acceleration.md
 ├── horn-task-training.md
-├── parameter-sweeps-and-regime-analysis.md
-└── braintools-optimizer-reference.md
+│   ├── braintools-metrics.md
+│   └── braintools-optimizer.md
+└── parameter-sweeps-and-regime-analysis.md
 ```
 
-The skill defines ten package references and owns its own optimizer-reference copy.
+The skill defines ten package references plus three reusable Braintools reference Markdown files.
 
 | Canonical reference | Need | Crafting source |
 |---|---|---|
@@ -599,19 +588,15 @@ The skill defines ten package references and owns its own optimizer-reference co
 | `skills/brainmass/references/noiseprocesses.md` | Noise-family inventory, seeding, stochastic runs, and batched ensembles | [Noise API](https://brainx.chaobrain.com/brainmass/reference/noise.html), [noise tutorial](https://brainx.chaobrain.com/brainmass/tutorials/03_noise.html) |
 | `skills/brainmass/references/coupling-network-api.md` | Coupling mechanisms, delays, and network variants | [Coupling API](https://brainx.chaobrain.com/brainmass/reference/coupling.html), [network tutorial](https://brainx.chaobrain.com/brainmass/tutorials/04_building_a_network.html), [coupling/delays concept](https://brainx.chaobrain.com/brainmass/concepts/coupling_and_delays.html) |
 | `skills/brainmass/references/forward-observation-api.md` | HRFBold, kernels, TemporalAverage, BOLDSignal, EEG/MEG, and lead fields | [Forward API](https://brainx.chaobrain.com/brainmass/reference/forward.html), [observation API](https://brainx.chaobrain.com/brainmass/reference/observation.html), [forward-model tutorial](https://brainx.chaobrain.com/brainmass/tutorials/05_forward_models.html) |
-| `skills/brainmass/references/orchestration-fitting-objectives-api.md` | Simulator, Network, Fitter/FitResult, objective functions, and backend boundaries | [Orchestration API](https://brainx.chaobrain.com/brainmass/reference/orchestration.html), [gradient fitting](https://brainx.chaobrain.com/brainmass/tutorials/06_fitting_with_gradients.html), [gradient-free fitting](https://brainx.chaobrain.com/brainmass/tutorials/07_gradient_free_fitting.html), [custom objective](https://brainx.chaobrain.com/brainmass/howto/custom_objective.html) |
+| `skills/brainmass/references/fitting-with-objectives-api.md` | Simulator, Network, Fitter/FitResult, objective functions, and backend boundaries | [Orchestration API](https://brainx.chaobrain.com/brainmass/reference/orchestration.html), [gradient fitting](https://brainx.chaobrain.com/brainmass/tutorials/06_fitting_with_gradients.html), [gradient-free fitting](https://brainx.chaobrain.com/brainmass/tutorials/07_gradient_free_fitting.html), [custom objective](https://brainx.chaobrain.com/brainmass/howto/custom_objective.html) |
 | `skills/brainmass/references/datasets-api.md` | Dataset registration/loading, Connectome, Signal, and task containers | [Datasets API](https://brainx.chaobrain.com/brainmass/reference/datasets.html) |
 | `skills/brainmass/references/visualization-analysis-api.md` | Plotting, FC/FCD, and spectral analysis | [Visualization API](https://brainx.chaobrain.com/brainmass/reference/viz.html), [analysis how-to](https://brainx.chaobrain.com/brainmass/howto/analyze_results.html) |
 | `skills/brainmass/references/batch-transform-acceleration.md` | JIT, transformed loops, `scan`, `vmap`, checkpointing, batched initial conditions, and sweeps | [BrainMass batch and accelerate](https://brainx.chaobrain.com/brainmass/howto/batch_and_accelerate.html), with [BrainTrace batching](https://brainx.chaobrain.com/braintrace/tutorials/batching.html) only for the vmap-per-sample comparison already used by the skill |
 | `skills/brainmass/references/horn-task-training.md` | HORN components, task datasets, direct optimizer loops, and held-out metrics | [HORN API](https://brainx.chaobrain.com/brainmass/reference/horn.html), [task-training tutorial](https://brainx.chaobrain.com/brainmass/tutorials/08_training_on_tasks.html), [HORN case study](https://brainx.chaobrain.com/brainmass/gallery/case_studies/horn_cognitive_task.html) |
 | `skills/brainmass/references/parameter-sweeps-and-regime-analysis.md` | Regime exploration and sensitivity analysis distinct from fitting | [Parameter-sweeps how-to](https://brainx.chaobrain.com/brainmass/howto/parameter_sweeps.html) |
-| `skills/brainmass/references/braintools-optimizer-reference.md` | Optimizer/scheduler choice and SciPy/Nevergrad wrapper selection beyond the canonical fitter path | [Braintools optimization](https://brainx.chaobrain.com/braintools/optim/index.html) |
-
-##### Nested routes
-
-- `orchestration-fitting-objectives-api.md` must route to `skills/brainmass/references/scripts/gradient-free-fitting.py` for the complete derivative-free workflow.
-- The local optimizer reference may delegate to `skills/brainstate/SKILL.md` only when generic loss/gradient/JIT loop structure is needed; the BrainState skill then selects its training parent.
-- `horn-task-training.md` may route to the bundled HORN case-study script; keep the script specification in `reference-script-plan.md`.
+| `skills/brainmass/references/braintools-metrics.md` | Loss and metric selection for objective fitting and HORN task training | [Metric API](https://brainx.chaobrain.com/braintools/apis/metric.html) |
+| `skills/brainmass/references/braintools-optimizer.md` | Optimizer, scheduler, Optax bridge, and SciPy/Nevergrad wrapper selection for objective fitting and HORN task training | [Optimization API](https://brainx.chaobrain.com/braintools/apis/optim.html), [optimization tutorials](https://brainx.chaobrain.com/braintools/optim/index.html) |
+| `skills/brainmass/references/braintools-surrogate-gradient.md` | Surrogate-gradient selection for differentiable objective-fitting workflows that contain non-differentiable spike functions | [Surrogate-gradient API](https://brainx.chaobrain.com/braintools/apis/surrogate.html) |
 
 #### Script References
 
@@ -655,13 +640,15 @@ The skill defines ten package references and owns its own optimizer-reference co
 #### Essential Concepts
 
 - brain simulation and brain-inspired computing are the same computation, expressed once. The neurons, synapses, and projections you assemble to simulate a biophysical network are the exact objects you train with gradients and scale with linear-memory online learning.
-- Look at the brainstate skill for knowledge in Modules.
+- Look at the brainstate skill for knowledge in Modules
 - State initialization and BrainUnit quantities.
 - Neuron and synapse anatomy.
 - Projection roles: `comm`, `syn`, `out`, `post`.
 - AlignPre versus AlignPost.
 - Projection-before-post update order.
 #### Simulation techniques
+- Random Sampling rand, randn, randint, is useful for parameter intialization , basic random seed knowledge.
+- use the braintool.init apis to initialize states and parameters for reusable initialization policy, use braintool encoders when need to converts experimental/data input into spikes
 - must use brainstate.environ.context() to define the simulation environment
 - must use brainstate.transform.for_loop(step, times) for timestamped steps, `for_loop`/`scan` rollout and checkpointing.
 - Brainunit math functions that help with array: u.math.arange u.math.squeeze(), recommend to use
@@ -696,25 +683,29 @@ brainpy/
 ├── brainpy-plasticity.md
 ├── brainpy-custom-models.md
 ├── brainpy-training.md
+│   ├── braintools-encoder-library.md
+│   ├── braintools-initializers.md
+│   ├── braintools-metrics.md
+│   ├── braintools-optimizer.md
+│   └── braintools-surrogate-gradient.md
 ├── brainpy-readouts-and-inputs.md
-├── braintools.md
-├── braintools-optimizer-reference.md
-└── NEST-compatible/
-    └── nest-workflow.md
-        ├── model-library.md
-        ├── synapse-and-connectivity.md
-        ├── devices.md
-        ├── network-building.md
-        ├── divergence-and-parity.md
-        ├── integration-categories.md
-        └── scripts/
-            ├── brunel_alpha.py
-            ├── brunel_delta.py
-            ├── brette_et_al_2007.py
-            ├── synapsecollection.py
-            ├── evaluate_tsodyks2_synapse.py
-            ├── clopath_synapse_spike_pairing.py
-            └── spatial_gaussex.py
+├── NEST-compatible/
+│   └── nest-workflow.md
+│       ├── model-library.md
+│       ├── synapse-and-connectivity.md
+│       ├── devices.md
+│       ├── network-building.md
+│       ├── divergence-and-parity.md
+│       ├── integration-categories.md
+│       └── scripts/
+│           ├── brunel_alpha.py
+│           ├── brunel_delta.py
+│           ├── brette_et_al_2007.py
+│           ├── synapsecollection.py
+│           ├── evaluate_tsodyks2_synapse.py
+│           ├── clopath_synapse_spike_pairing.py
+│           └── spatial_gaussex.py
+└── braintools-cognitive-tasks.md
 ```
 
 | Canonical reference | Need | Crafting source |
@@ -727,10 +718,15 @@ brainpy/
 | `skills/brainpy/references/brainpy-custom-models.md` | Custom Neuron/Synapse anatomy, ODE steps, and paper reproduction | [Paper-reproduction how-to](https://brainx.chaobrain.com/brainpy-state/brainpy-style/howto/sim-reproduce-a-paper.html), [BrainPy gallery](https://brainx.chaobrain.com/brainpy-state/examples/brainpy-gallery.html) |
 | `skills/brainpy/references/brainpy-training.md` | Differentiability, surrogate gradients, ParamState, BPTT, and checkpointed rollouts | [Differentiability concept](https://brainx.chaobrain.com/brainpy-state/concepts/differentiability.html), [train-an-SNN tutorial](https://brainx.chaobrain.com/brainpy-state/brainpy-style/tutorials/04-train-an-snn.html), [surrogate-gradient how-to](https://brainx.chaobrain.com/brainpy-state/brainpy-style/howto/train-surrogate-gradients.html), [checkpointing how-to](https://brainx.chaobrain.com/brainpy-state/brainpy-style/howto/train-long-rollouts-checkpoint.html) |
 | `skills/brainpy/references/brainpy-readouts-and-inputs.md` | Readout heads, spike/input generators, Poisson helpers, and encoders | [Readout API](https://brainx.chaobrain.com/brainpy-state/apis/brainpy-readouts.html), [readout how-to](https://brainx.chaobrain.com/brainpy-state/brainpy-style/howto/train-readouts.html), [input API](https://brainx.chaobrain.com/brainpy-state/apis/brainpy-inputs.html) |
-| `skills/brainpy/references/braintools.md` | Initializers, surrogate functions, metrics, encoders, and visualization helpers | [Braintools index](https://brainx.chaobrain.com/braintools/) |
-| `skills/brainpy/references/braintools-optimizer-reference.md` | Optimizer families, schedulers, and external wrappers | [Braintools optimization](https://brainx.chaobrain.com/braintools/optim/index.html) |
 | `skills/brainstate/references/brainstate-dynamics/brain-dynamics-delay-protocol.md` | Delay APIs and buffer behavior | [delay tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/02_synaptic_delays.html) |
 | `skills/brainstate/references/brainstate-dynamics/brain-dynamics-event-driven-operators.md` | Sparse event operators and connectivity | [event-driven tutorial](https://brainx.chaobrain.com/brainstate/tutorials/brain_dynamics/03_event_driven_operators.html) |
+| `skills/brainpy/references/braintools-encoder-library.md` | Select latency, rate, Poisson, population, Bernoulli, delta, step-current, spike-count, temporal, or rank-order encoders and related spike operations | [Braintools encoder API](https://brainx.chaobrain.com/braintools/apis/braintools.html) |
+| `skills/brainpy/references/braintools-cognitive-tasks.md` | Build built-in or custom cognitive tasks, compose phases, and generate fixed- or variable-length trials | [Cognitive-task API](https://brainx.chaobrain.com/braintools/apis/cogtask.html) |
+| `skills/brainpy/references/braintools-initializers.md` | Select and compose parameter, weight, and distance-modulated connectivity initializers | [Initializer API](https://brainx.chaobrain.com/braintools/apis/init.html) |
+| `skills/brainpy/references/braintools-metrics.md` | Select classification, regression, ranking, spike-train, synchronization, LFP, and connectivity metrics | [Metric API](https://brainx.chaobrain.com/braintools/apis/metric.html) |
+| `skills/brainpy/references/braintools-optimizer.md` | Select optimizers, learning-rate schedulers, Optax bridges, and SciPy or Nevergrad wrappers | [Optimization API](https://brainx.chaobrain.com/braintools/apis/optim.html), [optimization tutorials](https://brainx.chaobrain.com/braintools/optim/index.html) |
+| `skills/brainpy/references/braintools-surrogate-gradient.md` | Select functional or object-style surrogate gradients and tune their shape parameters for SNN training | [Surrogate-gradient API](https://brainx.chaobrain.com/braintools/apis/surrogate.html) |
+
 
 ##### NEST-compatible nested branch
 
@@ -823,7 +819,9 @@ braintrace/
 ├── primitive-ops-and-transforms.md
 ├── algorithms-customization.md
 ├── compiler-graph-debugging.md
-└── state-batching-workflows.md
+├── state-batching-workflows.md
+├── braintools-metrics.md
+└── braintools-optimizer.md
 ```
 
 | Canonical reference | Need | Crafting source |
@@ -832,6 +830,8 @@ braintrace/
 | `skills/braintrace/references/algorithms-and-customization.md` | Algorithm-by-algorithm selection and custom algorithm extension | [Algorithms API](https://brainx.chaobrain.com/braintrace/apis/algorithms.html), [custom algorithms](https://brainx.chaobrain.com/braintrace/advanced/custom_algorithms.html) |
 | `skills/braintrace/references/compiler-graph-debugging.md` | `ETraceGraph`, hidden groups, relations, diagnostics, exclusions, limitations, and workarounds | [Compiler internals](https://brainx.chaobrain.com/braintrace/advanced/compiler_internals.html), [limitations](https://brainx.chaobrain.com/braintrace/advanced/limitations.html), [graph visualization](https://brainx.chaobrain.com/braintrace/tutorials/graph_visualization.html) |
 | `skills/braintrace/references/state-batching-workflows.md` | Hidden-state variants, initialization/reset, single-sample mode, vmap batching, and multi-step input | [Hidden states](https://brainx.chaobrain.com/braintrace/tutorials/hidden_states.html), [batching](https://brainx.chaobrain.com/braintrace/tutorials/batching.html) |
+| `skills/braintrace/references/braintools-metrics.md` | Select losses and evaluation metrics for online-learning workflows | [Metric API](https://brainx.chaobrain.com/braintools/apis/metric.html) |
+| `skills/braintrace/references/braintools-optimizer.md` | Select optimizers and learning-rate schedules for online parameter updates | [Optimization API](https://brainx.chaobrain.com/braintools/apis/optim.html), [optimization tutorials](https://brainx.chaobrain.com/braintools/optim/index.html) |
 
 #### Script References
 
@@ -1032,7 +1032,10 @@ No nested Markdown layer is declared.
 - Broad eager dependency upgrade used.
 - Malformed frontmatter prevents reliable skill discovery.
 
+---
 
-## Benchmark Design
+## Benchmark Documents
 
-[BrainX Skill Benchmark Design](https://docs.google.com/document/d/1fIoGAZqnvciY8jDwxRjGxnV3DPmQIb2GA8CZG9uDpGc/edit?tab=t.0)
+- [BrainCell benchmark](benchmark.md)
+- [BrainPy benchmark](benchmarkbrainpy.md)
+- [BrainMass benchmark](benchmark-brainmass.md)

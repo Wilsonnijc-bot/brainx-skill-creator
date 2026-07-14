@@ -2,205 +2,36 @@
 
 ## Purpose
 
-## Purpose
-
-Build a simple configurable E–I spiking-network benchmark for BrainPy-state.
-
-The benchmark should test whether an agent can correctly assemble a recurrent neural network from high-level requirements such as:
-
-* Neuron model.
-* Excitatory and inhibitory population sizes.
-* Connection probability.
-* Synaptic weights.
-* Synaptic time constants.
-* Transmission delays.
-* External input.
-* Simulation duration and time step.
-
-Use a single mixed `QuaIF` population, with excitatory neurons stored in the first slice and inhibitory neurons in the second slice.
-
-Create two recurrent pathways:
-
-```text
-excitatory neurons → all neurons
-inhibitory neurons → all neurons
-```
-
-Both pathways must use:
-
-```python
-brainpy.state.align_pre_projection
-brainstate.nn.EventLinear
-brainpy.state.Expon
-```
-
-The projection should obtain delayed presynaptic activity from the neuron population by delaying membrane voltage and reconstructing spikes with `get_spike`.
-
-The benchmark is intended to evaluate:
-
-1. Whether the requested network configuration is translated into valid BrainPy-state code.
-2. Whether delays, connectivity, synaptic dynamics, and neuron dynamics are wired correctly.
-3. Whether parameter changes produce understandable changes in network activity.
-4. Whether the resulting network remains biologically interpretable rather than merely executing without errors.
-
-The baseline network should produce sustained recurrent spiking with inhibitory stabilization. It should not be completely silent, continuously saturated, or dominated by population-wide synchronous firing.
-
-Keep the implementation minimal. The benchmark should contain one network class, one simulation loop, basic runtime reporting, mean E/I firing rates, and one raster plot.
-
----
+Test whether an agent can turn a high-level E–I network specification into a
+minimal, valid BrainPy-state simulation with correct recurrent wiring, delays,
+units, transforms, and biologically interpretable activity.
 
 ## Prompt to the Agent
 
-Create a configurable recurrent excitatory–inhibitory network using BrainPy-state.
+Build a small, configurable BrainPy-state E–I network with one mixed `QuaIF`
+population: the first `n_exc` neurons are excitatory and the rest are
+inhibitory. Add two recurrent paths, E → all and I → all, using
+`align_pre_projection`, `Expon`, `EventLinear`, and current-based `CUBA`.
 
-Use one combined `brainpy.state.QuaIF` population:
+Delay `population.prefetch("V")` with `.delay.at(delay)`, recover spikes with
+`population.get_spike(delayed_v)`, then slice the E and I presynaptic groups.
+Build explicit weights as Bernoulli masks times synaptic weights. Their shapes
+must be `(n_exc, n_exc + n_inh)` and `(n_inh, n_exc + n_inh)`; keep E weights
+positive and I weights negative.
 
-```text
-first n_exc neurons = excitatory
-last n_inh neurons = inhibitory
-```
+Make population sizes, connection probability, E/I weights, E/I delays,
+synaptic time constant, external input, time step, duration, and seed
+configurable. Use this baseline: `n_exc=800`, `n_inh=200`, `prob=0.1`,
+`delay=1.5 * u.ms`, `tau_syn=2.0 * u.ms`, `dt=0.1 * u.ms`,
+`duration=1000.0 * u.ms`, and `external_input=5.0 * u.mA`. Set
+`JE = 1 / u.math.sqrt(prob * n_exc) * u.mS` and `JI = -4 * JE`.
 
-Create two recurrent projections:
-
-```text
-E → all neurons
-I → all neurons
-```
-
-Use the following APIs for both projections:
-
-```python
-brainpy.state.align_pre_projection
-brainstate.nn.EventLinear
-brainpy.state.Expon
-brainpy.state.CUBA
-```
-
-Implement delayed spike transmission using:
-
-```python
-population.prefetch("V").delay.at(delay)
-```
-
-Convert the delayed membrane voltage back into spikes with:
-
-```python
-population.get_spike(delayed_v)
-```
-
-Then select the appropriate presynaptic population:
-
-```python
-# Excitatory spikes
-population.get_spike(delayed_v)[:n_exc]
-
-# Inhibitory spikes
-population.get_spike(delayed_v)[n_exc:]
-```
-
-Use `brainstate.nn.EventLinear` with explicit weight matrices.
-
-Construct each weight matrix from:
-
-```text
-Bernoulli connectivity mask × synaptic weight
-```
-
-The excitatory matrix must have shape:
-
-```text
-(n_exc, n_exc + n_inh)
-```
-
-The inhibitory matrix must have shape:
-
-```text
-(n_inh, n_exc + n_inh)
-```
-
-Use positive excitatory weights and negative inhibitory weights because the benchmark uses current-based `CUBA` output.
-
-The network must accept these configurable parameters:
-
-```text
-n_exc
-n_inh
-connection probability
-excitatory weight
-inhibitory weight
-excitatory delay
-inhibitory delay
-synaptic time constant
-external input
-simulation time step
-simulation duration
-random seed
-```
-
-Inside the network update:
-
-```python
-self.E()
-self.I()
-self.N(external_input)
-```
-
-Return the neuron spikes from each simulation step.
-
-Run the model using:
-
-```python
-brainstate.transform.for_loop
-```
-
-Report only:
-
-```text
-simulation runtime
-mean excitatory firing rate
-mean inhibitory firing rate
-```
-
-Generate one raster plot that clearly shows the boundary between excitatory and inhibitory neurons.
-
-The implementation should remain small and direct. Do not add:
-
-```text
-training
-plasticity
-parameter optimization
-configuration frameworks
-multiple network classes
-complex analysis utilities
-large validation systems
-additional biological mechanisms
-```
-
-After implementing the baseline, support simple parameter sweeps over:
-
-```text
-network size
-connection probability
-synaptic delay
-excitatory weight
-inhibitory weight
-external input
-```
-
-When a parameter changes, preserve the rest of the network structure.
-
-Treat the network as biologically reasonable only when:
-
-* Both populations produce spikes.
-* Inhibition prevents uncontrolled excitation.
-* Activity is sustained rather than appearing only at initialization.
-* The raster is not fully synchronized.
-* Increasing excitation raises activity.
-* Increasing inhibition suppresses activity.
-* Increasing delay visibly changes temporal organization without breaking the simulation.
-
-Do not tune the network toward one exact firing rate. The goal is a stable and interpretable E–I regime that responds predictably to parameter changes.
-
+In each update call `self.E()`, `self.I()`, then `self.N(external_input)`, and
+return the spikes. Simulate with `brainstate.transform.for_loop`. Report only
+runtime and mean E/I firing rates, and draw one raster with the E/I boundary.
+Also allow simple sweeps over size, probability, delay, E/I weight, and input.
+Keep the solution to one network class and one simulation loop; omit training,
+plasticity, optimization, extra mechanisms, and heavy analysis scaffolding.
 
 ---
 
