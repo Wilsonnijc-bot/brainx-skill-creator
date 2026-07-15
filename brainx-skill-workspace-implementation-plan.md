@@ -238,7 +238,6 @@ No skill or index route may select advanced randomness directly. The randomness 
 
 | Conditional reference | Selected by | Need | Crafting source |
 |---|---|---|---|
-| `skills/brainstate/references/libraries/solver-library-with-effects.md` | Dynamics parent | Numerical integration choice within a dynamics task; not one of the three owned dynamics children | BrainCell integration concept, API, solver guide, advanced integration, and integration-methods example |
 | `skills/brainstate/references/diagnostics/common-failures-index.md` | Transformed-diagnostics parent | Second-level recurring-failure routing | Existing diagnostic routing content |
 - `skills/brainstate/references/diagnostics/brainstate-transformed-diagnostics.md` establishes transformed diagnostics before selecting its second-level common-failures router.
 
@@ -373,8 +372,8 @@ braincell/
 ├── channel-library.md
 ├── solver-library-with-effects.md
 ├── array-creation.md
+├── braincell-custom-ion-channel-authoring.md
 └── multicompartment-cell-workflow.md
-    ├── braincell-custom-ion-channel-authoring.md
     ├── braincell-manual-morphology-construction.md
     ├── morphology-io-loading-validation.md
     ├── topology-building-and-visualization.md
@@ -395,12 +394,12 @@ braincell/
 | `skills/braincell/references/libraries/ion-library.md` | Built-in ions, fixed/InitNernst/dynamic choices, concentration dynamics, and `MixIons` | [Ions and channels concept](https://brainx.chaobrain.com/braincell/concepts/ions_channels.html), [ion tutorial](https://brainx.chaobrain.com/braincell/tutorials/ion.html), [ion API](https://brainx.chaobrain.com/braincell/apis/braincell.ion.html) |
 | `skills/braincell/references/libraries/channel-library.md` | Built-in channel families, dependencies, selection, and the built-in-versus-custom boundary | [Ions and channels concept](https://brainx.chaobrain.com/braincell/concepts/ions_channels.html), [channel tutorial](https://brainx.chaobrain.com/braincell/tutorials/channel.html), [channel API](https://brainx.chaobrain.com/braincell/apis/braincell.channel.html), [channel ablation](https://brainx.chaobrain.com/braincell/examples/channel_ablation.html), [adaptation example](https://brainx.chaobrain.com/braincell/examples/spike_frequency_adaptation.html) |
 | `skills/braincell/references/libraries/solver-library-with-effects.md` | Integrator names, cable/composite solvers, speed/accuracy guidance, and numerical effects | [Integration concept](https://brainx.chaobrain.com/braincell/concepts/integration.html), [integration API](https://brainx.chaobrain.com/braincell/apis/integration.html), [solver guide](https://brainx.chaobrain.com/braincell/integration/solvers.html), [advanced integration](https://brainx.chaobrain.com/braincell/integration/advanced.html), [integration-methods example](https://brainx.chaobrain.com/braincell/examples/integration_methods.html) |
+| `skills/braincell/references/braincell/braincell-custom-ion-channel-authoring.md` | Custom channel/ion extension after built-ins are exhausted | [Ions and channels concept](https://brainx.chaobrain.com/braincell/concepts/ions_channels.html), [channel tutorial](https://brainx.chaobrain.com/braincell/tutorials/channel.html), [extending BrainCell](https://brainx.chaobrain.com/braincell/developer/extending.html) |
 
 ##### Nested reference tree under the multicompartment parent
 
 | Exclusive nested child | Need | Crafting source |
 |---|---|---|
-| `skills/braincell/references/braincell/braincell-custom-ion-channel-authoring.md` | Custom channel/ion extension after built-ins are exhausted | [Ions and channels concept](https://brainx.chaobrain.com/braincell/concepts/ions_channels.html), [channel tutorial](https://brainx.chaobrain.com/braincell/tutorials/channel.html), [extending BrainCell](https://brainx.chaobrain.com/braincell/developer/extending.html) |
 | `skills/braincell/references/braincell/morphology-io-loading-validation.md` | SWC, ASC, NeuroML2, NeuroMorpho, validation, checkpoints, and post-load checks | [IO overview](https://brainx.chaobrain.com/braincell/file_formats/overview.html), [SWC](https://brainx.chaobrain.com/braincell/file_formats/swc.html), [ASC](https://brainx.chaobrain.com/braincell/file_formats/asc.html), [NeuroML2](https://brainx.chaobrain.com/braincell/file_formats/neuroml2.html), [NeuroMorpho](https://brainx.chaobrain.com/braincell/file_formats/neuromorpho.html), [checkpointing](https://brainx.chaobrain.com/braincell/file_formats/checkpointing.html), [morphology concept](https://brainx.chaobrain.com/braincell/concepts/morphology.html) |
 | `skills/braincell/references/braincell/topology-building-and-visualization.md` | NodeTree, CV/branch/node views, placement verification, and visualization | [Visualization tutorial](https://brainx.chaobrain.com/braincell/tutorials/vis.html), [filter tutorial](https://brainx.chaobrain.com/braincell/tutorials/filter.html) |
 | `skills/braincell/references/braincell/probe-reference.md` | State, mechanism, current, and trace probes plus missing-trace checks | [Mechanisms tutorial](https://brainx.chaobrain.com/braincell/tutorials/mech.html) |
