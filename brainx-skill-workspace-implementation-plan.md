@@ -526,23 +526,23 @@ All four required Markdown references are skill-local and already exist. Applica
 - Advanced branches: model catalog, noise, coupling/delays, observations, fitting backends, datasets, analysis, task training, sweeps.
 
 #### Essential Concepts
-- brainmass backpropagates through the ODE solve, brings gradient-based fitting, high-dimensional parameter fields, GPU/TPU batching, and train neural-mass-style networks on tasks — all unit-safe and end-to-end from parameters to BOLD / EEG / MEG signals.
-- Architecture: a model describes one region’s dynamics, a Simulator runs it, a Network couples many regions, and a Fitter tunes parameters to data. Units thread through all of them. Each section below is a few runnable lines.
-- BrainMass ships models and delegates infrastructure.
-- Models are`*Step` and `list_models()` method for discovery.
-- `Simulator` wraps steps into one `run` call .
-- Noise attached to the model.
-- Seed before reported stochastic runs.
-- `Network` turns a single *Step node (sized for N regions) into a coupled whole-brain model, you give it connectivity, distance, speed, delays.
-- Fitter tunes a model’s trainable parameters to data behind one `.fit()`call
-- When to look at gradient-free fitting.
-- Forward model is the biophysical map from that hidden activity to a measurable neuroimaging signal
-- Units throughout the pipeline.
-#### Simulation techniques
-- Random Sampling rand, randn, randint, is useful for parameter intialization , basic random seed knowledge.
-- use the braintool.init apis to initialize states and parameters for reusable initialization policy, use braintool encoders when need to converts experimental/data input into spikes
-- must use brainstate.environ.context() to define the simulation environment
-- must use brainstate.transform.for_loop(step, times) for timestamped steps, `for_loop`/`scan` rollout and checkpointing.
+
+- BrainMass implements neural mass models with BrainState for differentiable, JAX-based whole-brain modeling.
+- A `*Step` model defines regional dynamics; use `list_models()` for discovery and model selection.
+- `Simulator` runs a model, `Network` couples regional nodes, forward models map hidden activity to BOLD/EEG/MEG signals, and `Fitter` tunes trainable parameters to data.
+- Attach stochastic noise to the model and seed every reported stochastic run.
+- Configure a `Network` with connectivity, distance, transmission speed, coupling, and delays only after establishing the simulation environment and global `dt`.
+- Prefer gradient-based fitting when the workflow is differentiable; route to gradient-free fitting only when the objective or model requires it.
+- Preserve BrainUnit quantities throughout simulation, coupling, observation, and fitting boundaries.
+- Route reusable initialization, encoding, metrics, optimization, surrogate-gradient, and cognitive-task details to the matching Braintools references.
+
+#### Simulation and Training Rules
+
+- Use BrainState random APIs such as `rand`, `randn`, and `randint` for stochastic initialization, with explicit seed control when results are reported.
+- Use `braintools.init` for reusable state and parameter initialization policies.
+- Use Braintools encoders only when experimental or task inputs must be converted into spikes.
+- Define simulation context with `brainstate.environ.context()`.
+- Execute timestamped steps with `brainstate.transform.for_loop(step, times)`; use transform-safe `for_loop`/`scan` rollout and checkpointing for long runs.
 
 #### Canonical Workflow Scripts Included in the Skill
 

@@ -2,36 +2,7 @@
 
 ## Purpose
 
-Test whether an agent can correctly construct and simulate one configurable BrainCell `SingleCompartment` neuron containing:
-
-Neuron
-│
-├── Sodium ion environment
-│   └── Sodium channel
-│       └── Na_HH1952
-│
-├── Potassium ion environment
-│   └── Potassium channel
-│       └── Kv1p1_MA2025_BC
-│
-├── Calcium ion environment and concentration dynamics
-│   └── Calcium channel
-│       └── Cav1p2_MA2025_BC
-│
-├── HCN1 channel
-└── Leak channel
-
-* `SodiumFixed`
-
-  * `Na_HH1952`
-* `PotassiumFixed`
-
-  * `Kv1p1_MA2025_BC`
-* `CdpCAM_MA2024_PC`
-
-  * `Cav1p2_MA2025_BC`
-* direct neuron-level `HCN1_RI2021_SC`
-* direct neuron-level `IL`
+Test whether an agent can correctly construct and simulate one configurable BrainCell `SingleCompartment` neuron. The required composition combines fixed sodium and potassium ions, dynamic calcium, and direct neuron-level HCN and leak channels. The exact hierarchy and parameters are specified below.
 
 This is a deliberately hybrid benchmark cell. It must not be presented as a calibrated biological neuron or a classical Hodgkin–Huxley model.
 
@@ -101,24 +72,6 @@ ConfigurableHybridCell
 │   └── ICav1p2: Cav1p2_MA2025_BC
 ├── IHCN1: HCN1_RI2021_SC
 └── IL: IL
-
-
-Neuron
-│
-├── Sodium ion environment
-│   └── Sodium channel
-│       └── Na_HH1952
-│
-├── Potassium ion environment
-│   └── Potassium channel
-│       └── Kv1p1_MA2025_BC
-│
-├── Calcium ion environment and concentration dynamics
-│   └── Calcium channel
-│       └── Cav1p2_MA2025_BC
-│
-├── HCN1 channel
-└── Leak channel
 ```
 
 `CdpCAM_MA2024_PC` is an ion-dynamics model, not a channel. It contains calcium concentration, pump, buffer, Calbindin, Parvalbumin, and Calmodulin dynamics. `Cav1p2_MA2025_BC` is the calcium channel placed inside it.
