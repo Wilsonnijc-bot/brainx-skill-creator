@@ -1,6 +1,6 @@
 # Official Source Extraction
 
-Use this reference after the raw draft has been inventoried and relevant official HTML pages have been selected through `brainx_agent_html_reference.md` and its package-specific inventory. Apply it when the user gives a concept title plus official HTML, or when a draft contains explanations that need replacement with official wording.
+Use this reference after the raw draft has been inventoried and relevant official HTML pages have been selected from the matching package-specific inventory or `brainx_install_spec.md`. Apply it when the user gives a concept title plus official HTML, or when a draft contains explanations that need replacement with official wording.
 
 Process:
 

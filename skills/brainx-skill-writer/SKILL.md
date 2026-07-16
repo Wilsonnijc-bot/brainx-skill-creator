@@ -19,7 +19,7 @@ The objective is to make the agent master BrainX packages such as BrainUnit, Bra
 ## Core Rules
 
 - Read the raw draft first. Treat the draft as the primary map of intended concepts, workflow shape, scripts, overlays, and reference needs before opening any HTML.
-- Study only relevant official HTML. Use `references/brainx_agent_html_reference.md` to choose the package inventory, then select only pages that directly support the draft's P0 concepts, scripts, or overlays. Do not browse broad navigation, click adjacent pages, or collect background that is not needed for the target skill.
+- Study only relevant official HTML. Choose the matching package-specific inventory from `references/`, then select only pages that directly support the draft's P0 concepts, scripts, or overlays. Use `references/brainx_install_spec.md` only for installation or release-history tasks. Do not browse broad navigation, click adjacent pages, or collect background that is not needed for the target skill.
 - Ground BrainX concepts and API claims in official HTML. If the user gives only a concept title and best source HTML, open or parse the HTML and select the best official sentence or compact phrase from that source. Do not invent explanations, bootstrap from memory, or write textbook paragraphs.
 - Preserve the draft's useful scripts and structure by default. The user's raw draft often already follows the target pattern and contains mostly-ready scripts; keep those scripts unless official HTML or local validation shows a concrete reason to change them.
 - Pick direct sentences from the official HTML for concept definitions. If a sentence is too long, lightly trim while preserving meaning.
@@ -30,7 +30,7 @@ The objective is to make the agent master BrainX packages such as BrainUnit, Bra
 
 1. Read the user's raw draft, concept title, target skill name, and any supplied source hints completely.
 2. Inventory the draft: P0 concepts, existing workflow scripts, subpatterns/overlays, API claims, missing citations, and reference candidates.
-3. Open `references/brainx_agent_html_reference.md`, route to the matching package inventory, and select only the official HTML pages that directly match the draft inventory.
+3. Open the matching package-specific HTML reference in `references/` and select only the official HTML pages that directly match the draft inventory. For installation or release-history work, open `references/brainx_install_spec.md`.
 4. Visit and study only those relevant HTML pages. For each page, extract the page title, target heading, nearest useful code block, and one compact official phrase for each concept or API rule that must be grounded.
 5. Open `references/official-source-extraction.md` when selecting or trimming source language, when HTML is noisy, or when multiple candidate sentences compete.
 6. Write or revise the skill only after the draft-first inventory and relevant-HTML pass are complete.
@@ -72,7 +72,7 @@ Required output discipline:
 
 ## References
 
-- `references/brainx_agent_html_reference.md` - compact router for shared BrainX pages and package-specific inventories.
+- `references/brainx_install_spec.md` - official BrainX installation and changelog pages.
 - `references/braincell_html_reference.md` - BrainCell concepts, tutorials, examples, file formats, and API routes.
 - `references/brainstate_html_reference.md` - BrainState tutorials, how-to guides, concepts, examples, API modules, and generated class pages.
 - `references/brainpy_state_html_reference.md` - BrainPy-State concepts, native and NEST-compatible modeling paths, API categories, and examples.
