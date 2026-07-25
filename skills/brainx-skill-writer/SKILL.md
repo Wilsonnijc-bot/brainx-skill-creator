@@ -22,8 +22,7 @@ The objective is to make the agent master BrainX packages such as BrainUnit, Bra
 - Study only relevant official HTML. Choose the matching package-specific inventory from `references/`, then select only pages that directly support the draft's P0 concepts, scripts, or overlays. Use `references/brainx_install_spec.md` only for installation or release-history tasks. Do not browse broad navigation, click adjacent pages, or collect background that is not needed for the target skill.
 - Ground BrainX concepts and API claims in official HTML. If the user gives only a concept title and best source HTML, open or parse the HTML and select the best official sentence or compact phrase from that source. Do not invent explanations, bootstrap from memory, or write textbook paragraphs.
 - Preserve the draft's useful scripts and structure by default. The user's raw draft often already follows the target pattern and contains mostly-ready scripts; keep those scripts unless official HTML or local validation shows a concrete reason to change them.
-- Pick direct sentences from the official HTML for concept definitions. If a sentence is too long, lightly trim while preserving meaning.
-- Keep `SKILL.md` dense and high-signal: purpose, task boundaries, P0 BrainX concepts, canonical workflow scripts, subpatterns/overlays, and routing to references for variants.
+- Keep `SKILL.md` dense and high-signal: purpose, task boundaries, Underlying principle, individual BrainX concepts+ canonical workflow scripts section, and routing to references for variants.
 - Use progressive disclosure. Put the canonical path and essential scripts in the body; move variants, long explanations, extended examples, and exhaustive API lists into `references/`.
 
 ## Required Working Order
@@ -38,18 +37,82 @@ The objective is to make the agent master BrainX packages such as BrainUnit, Bra
 
 ## Target Skill Pattern
 
-Mirror the information architecture used by strong scientific/API skills such as the scikit-learn and cuOpt examples: fundamental concepts first, general workflow scripts next, smaller reusable patterns after that, references last. Match the pattern, not their domain content.
+Use the BrainState skill pattern as the approximate ideal: organize the body around the package's design logic and the reader's implementation decisions, not around a detached catalogue of P0 definitions. Preserve useful variation when another BrainX package needs a different emphasis or grouping.
 
-Use this body structure unless the user explicitly requests a different one:
+Use this body structure unless the package or user request clearly requires a variation:
 
-1. **Purpose and boundaries** - one compact paragraph on what the skill helps the agent do and when to use it.
-2. **P0 concepts** - the most fundamental BrainX concepts the agent must know before writing code. MUST Favor source-grounded phrases and operational distinctions over broad background.
-3. **Common general workflow** - the canonical script or scripts for the main task. Prefer complete, runnable snippets from the draft. After each script, add sharp explanations of the code decisions: why this BrainX object/API is used, what state or units it controls, and what the agent must not accidentally change.
-4. **Subpatterns and overlays** - short scripts or fragments for variants, extensions, and edge cases. Each pattern needs a clear "use when" cue and the smallest code needed to adapt the canonical workflow.
-5. **Common issues or gotchas** - include only high-impact BrainX-specific failure modes grounded in docs, draft evidence, or verified behavior.
-6. **References** - list local reference files and official HTML pages used for deeper lookup. Keep exhaustive details out of the main body.
+1. **Purpose and boundary** - one compact section defining what the skill owns, its canonical path, and where adjacent BrainX tasks should be routed.
+2. **Underlying principle of `<Package>`** - immediately after the purpose, explain the central lower-level philosophy that unifies the package. State sharply what problem the design solves, how its core abstractions work together, and how that design represents or supports neuroscience modeling. Synthesize the P0 concepts here instead of listing them as disconnected definitions.
+3. **API structure overview** - give a compact map of the main namespaces, API families, or architectural layers and what kind of operation each owns. This is an orientation map, not an exhaustive API inventory.
+4. **Concept + canonical workflow sections** - cover the P0 concepts one by one through implementation-centered sections. Every section must follow the **API-Centered Section Style** below: one mental-model sentence, a two-column API table, one canonical example, and a route to advanced references. Closely coupled P0 concepts may share a section when separating them would obscure the real workflow.
+5. **Reference routing** - route advanced variants, edge cases, detailed lifecycle behavior, complete catalogues, complex compositions, and uncommon failure modes to the smallest relevant reference file.
 
-Do not bury the first executable workflow under long concept exposition. Do not convert the body into a documentation summary. The agent should be able to start from the P0 concepts, run or adapt the canonical script, then layer overlays as needed.
+Do not create a separate P0-concepts catalogue followed by a distant general-workflow section. The underlying-principle section should establish the package philosophy; the later concept sections should make each P0 concept operational.
+
+### API-Centered Section Style for Concept + Canonical Workflow Sections
+
+This style applies to every **Concept + canonical workflow section** in item 4 above. Each such section should function as a compact workflow guide that gives the reader the essential mental model, the relevant APIs, and one canonical implementation path.
+
+1. **Open with one mental-model sentence.**
+
+   Begin with a single sentence explaining what the mechanism represents, how it behaves, and why it matters in practice.
+
+2. **Present operational guidance in a two-column API table.**
+
+   Give each important API its own row. Each description should state, in this order:
+
+   - when to use the API;
+   - what it does;
+   - any important propagation, mutation, restoration, validation, or lifecycle behavior;
+   - what it returns or what error it raises, when relevant.
+
+3. **Use direct, workflow-oriented language.**
+
+   Prefer formulations such as:
+
+   - "Use for..."
+   - "Use after..."
+   - "Use when..."
+   - "It propagates..."
+   - "It returns..."
+   - "It restores..."
+   - "It raises..."
+
+   Include conceptual explanation only when it changes an implementation decision or API choice.
+
+4. **Include one canonical example, usually minimal.**
+
+   Show only the code required to demonstrate the standard workflow. Remove lengthy setup, repeated explanation, secondary outputs, optional variants, and unrelated assertions. Retain assertions only when they verify an important shape, inferred value, state transition, or invariant.
+
+5. **Move advanced material into references.**
+
+   Put implementation details, edge cases, complete configuration maps, uncommon variants, failure modes, and complex compositions in a linked reference file.
+
+6. **Use this default section structure.**
+
+   ````markdown
+   ### Section title
+
+   One-sentence mental model.
+
+   | API | Description |
+   |---|---|
+   | `api()` | When to use it, what it does, and its important result or behavior. |
+
+   ```python
+   # Minimal canonical workflow
+   ```
+
+   Open `references/...` for advanced variants, edge cases, and detailed behavior.
+   ````
+
+7. **Maximize precision without becoming an API catalogue.**
+
+   Include closely related APIs only when they are necessary to complete the workflow or make an immediate implementation choice. Exclude APIs that do not help the reader execute the section's canonical path.
+
+The overall pattern is:
+
+**one mental model -> one API per row -> one canonical example -> advanced details in references**
 
 ## Script Handling
 
