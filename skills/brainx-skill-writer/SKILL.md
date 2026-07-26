@@ -143,3 +143,8 @@ Required output discipline:
 - `references/brainevent_html_reference.md` - BrainEvent tutorials, how-to guides, API categories, and custom-kernel references.
 - `references/braintrace_html_reference.md` - BrainTrace quickstarts, tutorials, API pages, advanced guides, and runnable examples.
 - `references/official-source-extraction.md` - how to parse HTML and choose source-grounded official wording.
+
+## Required Writing Reference
+
+Before writing or revising any BrainX reference, open and follow
+`references/referencewriting.md`.
