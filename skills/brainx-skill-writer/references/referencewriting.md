@@ -19,7 +19,7 @@ Use these references as structural models:
 
 | Reference | Type | Use it as a model when |
 |---|---|---|
-| `Array mechanics` (BrainUnit) | API-dominant | The material contains many parallel API families that need compact tables and one small workflow per family. |
+| `Array mechanics` (BrainUnit) | API-dominant | The material contains many parallel API families that need compact tables and occasional small workflows for non-obvious behavior. |
 | `Extension mechanisms` (BrainState) | Workflow-dominant | A small number of APIs are best explained through executable patterns. |
 | `Sparse formats` (BrainEvent) | Hybrid | The agent needs a compact API selection map followed by representative and end-to-end workflows. |
 
@@ -118,32 +118,57 @@ Avoid broad package descriptions.
 When many APIs are present, group them by a real decision boundary. Do not group
 APIs merely because they appear together in the source.
 
-Begin each family with a short selection rule:
+Give each API family its own heading, followed by a short selection rule:
 
-> Use these operations when ...
+```markdown
+### Family name
+
+Use these operations when ...
+
+| API | Description |
+|---|---|
+| `Constructor(x, y, arg=...)` | One-line distinguishing behavior. |
+| `operation(x, ...)` | One-line distinguishing behavior. |
+```
 
 The prose explains when to choose the family. The table explains which API
-within the family to use.
+within the family to use. Put one callable or constructor in each row, with its
+exact usable form in the first column.
 
-### Present the Selection Map Before Details
+Do not use a family as a table row and then place several APIs in another cell:
 
-When the reference contains multiple families, formats, or mechanisms, summarize
-the choice before documenting individual APIs.
+```markdown
+| Family feature | APIs |
+|---|---|
+| General optimizers | `Adam(...)`, `AdamW(...)`, `SGD(...)` |
+```
 
-| Choice | Use when | Key constraint |
+This layout makes individual APIs difficult to find and leaves no place for
+their distinct selection rules.
+
+### Add a Family Navigation Map Only When Needed
+
+When a long reference contains multiple families, formats, or mechanisms, an
+optional compact map may summarize the family-level choice before the detailed
+sections.
+
+| Family | Use when | Key constraint |
 |---|---|---|
-| `choice_a` | The input has ... | Preserves ... |
-| `choice_b` | The workflow requires ... | Returns ... |
+| [Family A](#family-a) | The input has ... | Preserves ... |
+| [Family B](#family-b) | The workflow requires ... | Returns ... |
 
 Keep this table compact. Its purpose is to route the agent to the correct
-section, not to duplicate the detailed API guidance.
+section, not to document APIs. Do not list callable names in this map. Omit the
+map when the family headings and their selection sentences already make the
+reference easy to scan.
 
 ## 3. Present APIs for Fast Lookup
 
 ### Choose the Smallest Useful Table
 
 Do not force every API into the same table format. Choose the table based on the
-decision it needs to support.
+decision it needs to support. In every API table, keep `API`, `Exact signature`,
+`Constructor`, or another callable-form label as the first column.
 
 #### APIs Requiring Individual Guidance
 
@@ -157,11 +182,12 @@ shapes, or other semantics require individual explanation:
 Each row should provide:
 
 - the exact callable form;
-- the distinguishing behavior;
-- the smallest example that reveals the result.
+- the distinguishing behavior.
 
-In the `Example and result` column, place the result on the next line as a code
-comment.
+Add the `Example and result` column only when at least one local call makes a
+non-obvious behavior, shape, type, unit, mutation, or return value clearer.
+Otherwise, use the two-column form. When the column is present, place the result
+on the next line as a code comment.
 
 #### Directly Corresponding Forms
 
@@ -187,7 +213,8 @@ Use these operations when ...
 ```
 
 Other table shapes are valid when they make the decision clearer. Keep the API
-or callable form in the first column so the table remains scannable.
+or callable form in the first column so the table remains scannable. Never use
+a family name as a substitute for an API row.
 
 ### Keep APIs Vertically Scannable
 
@@ -199,8 +226,10 @@ When an agent may need to locate a specific API, list APIs vertically:
 | `transpose(...)` | Reorder axes. |
 | `squeeze(...)` | Remove length-one axes. |
 
-Do not bury distinct APIs inside prose. However, do not give every API a full
-example merely because it exists.
+Use one API per row. Do not combine sibling APIs in one cell or create rows such
+as `Adaptive optimizers` whose description contains `Adam(...)`, `AdamW(...)`,
+and `Yogi(...)`. Do not bury distinct APIs inside prose. However, do not give
+every API a full example merely because it exists.
 
 Give every meaningful choice a visible place. Add full guidance only where
 behavior or selection is non-obvious.
@@ -233,13 +262,15 @@ than its prose. In that case:
 
 Do not replace a strong workflow with an artificial API catalog.
 
-### Use One Representative Path per Variation Family
+### Use At Most One Representative Path per Variation Family
 
-For a family of similar APIs, document one representative implementation path
-in full. Summarize the variations in a table and explain only the differences
-that affect selection, behavior, or results.
+For a family of similar APIs, add a representative implementation path only
+when code is needed to teach composition or make a non-obvious result visible.
+Document at most one path in full. Summarize the variations in a table and
+explain only the differences that affect selection, behavior, or results.
 
-This prevents repetitive examples while preserving searchable API coverage.
+This keeps code optional, prevents repetitive examples, and preserves searchable
+API coverage.
 
 ## 5. Make Correctness Visible
 
@@ -321,27 +352,33 @@ sections when the material requires it, but preserve the decision flow.
 
 Use this reference when ...
 
-## Selection Map
+## Family A
 
-| Family | Use when | Key constraint |
+Use these APIs when ...
+
+| API | Description |
 |---|---|---|
-
-## API Family
-
-Use these operations when ...
-
-| Exact signature | One-line description | Example and result |
-|---|---|---|
-
-### Representative Workflow
+| `Constructor(x, y, arg=...)` | One-line distinguishing behavior. |
+| `operation(x, ...)` | One-line distinguishing behavior. |
 
 ```python
-# Minimal executable example with an explicit result.
+# Optional representative workflow when composition or results need demonstration.
 ```
 
 **Invariant:** State the correctness rule beside the workflow it constrains.
 
+## Family B
 
+Use these APIs when ...
+
+| API | Description | Example and result |
+|---|---|---|
+| `other_api(x, ...)` | One-line distinguishing behavior. | `other_api(x)`<br>`# Result: ...` |
+
+Add an optional family navigation map before these sections only when the
+reference is too long to scan directly. The map must link to family sections
+without listing APIs in its cells.
+````
 
 ### Workflow-Dominant Template
 
@@ -381,17 +418,21 @@ Describe only variations that change selection, execution order, or results.
 
 Use this reference when ...
 
-## Selection Map
+## Format or Mechanism A
 
-| Format or mechanism | Use when | Key constraint |
+Use this family when ...
+
+| API | Description |
 |---|---|---|
+| `Constructor(x, y, arg=...)` | One-line distinguishing behavior. |
 
-## Representative API
+## Format or Mechanism B
 
-Use this API for the common path.
+Use this family when ...
 
-| Exact signature | One-line description | Example and result |
+| API | Description | Example and result |
 |---|---|---|
+| `convert(x, ...)` | One-line distinguishing behavior. | `convert(x)`<br>`# Result: ...` |
 
 ## Canonical Workflow
 
@@ -401,10 +442,8 @@ Use this API for the common path.
 
 **Invariant:** State the correctness rule beside the workflow it constrains.
 
-## Alternatives and Variations
-
-| API or format | How it differs | Choose it when |
-|---|---|---|
+Add an optional family navigation map before these sections only when needed.
+Keep each API under its family heading and in the first table column.
 
 ## Cross-Cutting Gotchas
 
