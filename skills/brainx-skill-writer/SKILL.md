@@ -42,7 +42,85 @@ Use the BrainState skill pattern as the approximate ideal: organize the body aro
 Use this body structure unless the package or user request clearly requires a variation:
 
 1. **Purpose and boundary** - one compact section defining what the skill owns, its canonical path, and where adjacent BrainX tasks should be routed.
-2. **Underlying principle of `<Package>`** - immediately after the purpose, explain the central lower-level philosophy that unifies the package. State sharply what problem the design solves, how its core abstractions work together, and how that design represents or supports neuroscience modeling. Synthesize the P0 concepts here instead of listing them as disconnected definitions.
+2. **Underlying principle of `<Package>`** - Write this section as a direct mapping from the user’s domain concepts to the core abstractions of the BrainX package.
+
+   The purpose is to help the agent translate a researcher’s natural description of a brain simulation into the concrete abstractions provided by `<Package>`.
+
+   **Use this pattern:**
+
+   > `<Core abstraction 1 of the BrainX package>` represents `<domain concept 1>`. `<Clarification of its specific role>`.
+   >
+   > `<Core abstraction 2 of the BrainX package>` represents `<domain concept 2>`. `<Clarification of its specific role>`.
+   >
+   > `<Core abstraction 3 of the BrainX package>` represents `<domain concept 3>`. `<Clarification of its specific role>`.
+
+   The clarification after each mapping is flexible. Use the verb that states the abstraction’s role most precisely, such as:
+
+   - it stores;
+   - it computes;
+   - it defines;
+   - it marks;
+   - it maps;
+   - it accumulates;
+   - it updates;
+   - it constrains;
+   - it controls;
+   - it generates.
+
+   **For example:**
+
+   - BinaryArray represents neuron spikes as boolean or 0/1 data. It marks which presynaptic neurons are active.
+   - Connectivity represents synaptic wiring. It defines which presynaptic neurons project to which postsynaptic neurons, while its weights define each synapse’s sign and strength.
+   - Plasticity operators represent activity-dependent changes in synaptic strength. They update stored weights from pre- and postsynaptic activity.
+
+   **Writing rules**
+
+   Start from the concepts that the target user naturally uses, such as neuron spikes, synaptic wiring, membrane state, neural dynamics, traces, plasticity, regions, or numerical integration.
+
+   **For each core package abstraction:**
+
+   - state exactly which domain concept it represents;
+   - add one direct clarification of what it stores, defines, computes, updates, or controls.
+
+   **Use short declarative sentences:**
+
+   > `<Abstraction>` represents `<domain concept>`. It `<specific role>`.
+
+   Explain domain meaning, not merely the data structure or API category.
+
+   **Weak:**
+
+   > BinaryArray is an efficient event-oriented array type.
+
+   **Strong:**
+
+   > BinaryArray represents neuron spikes as boolean or 0/1 data. It marks which neurons fired.
+
+   **Weak:**
+
+   > Connectivity provides several dense and sparse representations.
+
+   **Strong:**
+
+   > Connectivity represents synaptic wiring. It defines which neurons communicate and the strength of each connection.
+
+   **Do not add:**
+
+   - a general package introduction;
+   - a canonical workflow;
+   - decision rules between API variants;
+   - API signatures;
+   - code examples;
+   - implementation history;
+   - performance claims;
+   - broad or promotional descriptions.
+
+   Use only the core concept-to-abstraction mappings needed to explain what the package represents.
+
+   The final section should be a short sequence of direct statements:
+
+   > Package abstraction → domain concept → specific role
+
 3. **API structure overview** - give a compact map of the main namespaces, API families, or architectural layers and what kind of operation each owns. This is an orientation map, not an exhaustive API inventory.
 4. **Concept + canonical workflow sections** - cover the P0 concepts one by one through implementation-centered sections. Every section must follow the **API-Centered Section Style** below: one mental-model sentence, a two-column API table, one canonical example, and a route to advanced references. Closely coupled P0 concepts may share a section when separating them would obscure the real workflow.
 5. **Reference routing** - route advanced variants, edge cases, detailed lifecycle behavior, complete catalogues, complex compositions, and uncommon failure modes to the smallest relevant reference file.
