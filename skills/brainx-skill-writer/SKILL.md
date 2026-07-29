@@ -1,6 +1,6 @@
 ---
 name: brainx-skill-writer
-description: Write or revise dense, essential-information-rich BrainX package skills from official BrainX, BrainUnit, BrainState, BrainPy-State, BrainCell, BrainMass, BrainEvent, or BrainTrace HTML sources and user-provided draft material. Use when creating BrainX-native skill bodies, extracting official concept phrasing, organizing progressive-disclosure references, or converting rough BrainX skill drafts into deployable SKILL.md files. Do not use for eval benchmarking; use skill-testor for testing.
+description: Write or revise dense, essential-information-rich BrainX package skills from official BrainX, BrainTools, BrainUnit, BrainState, BrainPy-State, BrainCell, BrainMass, BrainEvent, or BrainTrace HTML sources and user-provided draft material. Use when creating BrainX-native skill bodies, extracting official concept phrasing, organizing progressive-disclosure references, or converting rough BrainX skill drafts into deployable SKILL.md files. Do not use for eval benchmarking; use skill-testor for testing.
 ---
 
 # BrainX Skill Writer
@@ -13,7 +13,7 @@ Create dense BrainX skills that are rich in essential execution information. Ass
 
 A BrainX skill is successful only if it helps the agent use BrainX packages correctly, cleanly, and intelligently. The agent should learn to solve BrainX modeling and simulation tasks through BrainX APIs, concepts, examples, and documentation.
 
-The objective is to make the agent master BrainX packages such as BrainUnit, BrainState, BrainPy-State, BrainCell, BrainMass, BrainEvent, and BrainTrace.
+The objective is to make the agent master BrainX packages such as BrainTools, BrainUnit, BrainState, BrainPy-State, BrainCell, BrainMass, BrainEvent, and BrainTrace.
 
 
 ## Core Rules
@@ -216,6 +216,7 @@ Required output discipline:
 ## References
 
 - `references/brainx_install_spec.md` - official BrainX installation and changelog pages.
+- `references/braintool_html_reference.md` - BrainTools cognitive-task, connectivity, initialization, simulation, training, analysis, persistence, and visualization API routes.
 - `references/braincell_html_reference.md` - BrainCell concepts, tutorials, examples, file formats, and API routes.
 - `references/brainstate_html_reference.md` - BrainState tutorials, how-to guides, concepts, examples, API modules, and generated class pages.
 - `references/brainpy_state_html_reference.md` - BrainPy-State concepts, native and NEST-compatible modeling paths, API categories, and examples.
