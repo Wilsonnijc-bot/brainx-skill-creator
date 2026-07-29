@@ -42,7 +42,7 @@ Use the BrainState skill pattern as the approximate ideal: organize the body aro
 Use this body structure unless the package or user request clearly requires a variation:
 
 1. **Purpose and boundary** - one compact section defining what the skill owns, its canonical path, and where adjacent BrainX tasks should be routed.
-2. **Underlying principle of `<Package>`** - Write this section as a direct mapping from the user’s domain concepts to the core abstractions of the BrainX package.
+2. **Underlying principle of `<Package>`** - Write this section as a direct mapping from the user’s domain concepts to the core abstractions of the BrainX package. Explain the central lower-level philosophy that unifies the package. State sharply the design philosophy, how its core abstractions work together, and how that design represents or supports neuroscience modeling.
 
    The purpose is to help the agent translate a researcher’s natural description of a brain simulation into the concrete abstractions provided by `<Package>`.
 
@@ -103,6 +103,8 @@ Use this body structure unless the package or user request clearly requires a va
    **Strong:**
 
    > Connectivity represents synaptic wiring. It defines which neurons communicate and the strength of each connection.
+   **Be Selective:**
+   - only use the high level core abstraction from the package. e.g State from brainstate, Binary Array& connectivity from brainevent. Not CSR in brainevent, not init_all_state from brainstate. Some package may not even have the a core abstraction that is worth to mention.
 
    **Do not add:**
 
